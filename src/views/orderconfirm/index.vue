@@ -13,11 +13,11 @@
             <li><span class="w-1">注文日</span>：{{ transData.takeDate }}</li>
             <li>
               <span class="w-1">金額</span>：￥
-              {{ transData.transPayAmount | NumFormat }}
+              {{ $numFormat(transData.transPayAmount) }}
             </li>
             <li>
               <span class="w-1" style="width: 100px">受注ステータス</span>：
-              {{ transData.exportStatus | exportStatus }}
+              {{ $exportStatus(transData.exportStatus) }}
             </li>
           </ul>
           <div class="detailttl">注文商品詳細</div>
@@ -38,7 +38,7 @@
                 <p>
                   ：{{ transGoods.sizeOptionName
                   }}<span class="fw-b fr"
-                    >￥{{ transGoods.sizeOptionPrice | NumFormat }}</span
+                    >￥{{ $numFormat(transGoods.sizeOptionPrice) }}</span
                   >
                 </p>
               </li>
@@ -49,7 +49,7 @@
                   }}<span
                     class="fw-b fr"
                     v-if="transGoods.sugarOptionPrice > 0"
-                    >{{ transGoods.sugarOptionPrice | NumFormat }}</span
+                    >{{ $numFormat(transGoods.sugarOptionPrice) }}</span
                   >
                 </p>
               </li>
@@ -58,7 +58,7 @@
                 <p>
                   ：{{ transGoods.iceOptionName
                   }}<span class="fw-b fr" v-if="transGoods.iceOptionPrice > 0"
-                    >￥{{ transGoods.iceOptionPrice | NumFormat }}</span
+                    >￥{{ $numFormat(transGoods.iceOptionPrice) }}</span
                   >
                 </p>
               </li>
@@ -71,7 +71,7 @@
                   <p>
                     ：{{ item.selectOptionName
                     }}<span class="fw-b fr"
-                      >￥{{ item.selectOptionPrice | NumFormat }}</span
+                      >￥{{ $numFormat(item.selectOptionPrice) }}</span
                     >
                   </p>
                 </li>
@@ -79,7 +79,7 @@
               <li>
                 <span class="w-2">数量</span>：{{ transGoods.goodsNum }}
                 <span class="fw-b fr" v-if="!transGoods.sizeOptionName"
-                  >￥{{ transGoods.goodsOriginAmount | NumFormat }}</span
+                  >￥{{ $numFormat(transGoods.goodsOriginAmount) }}</span
                 >
               </li>
               <div
@@ -109,12 +109,12 @@
           </div>
           <div class="detailprice">
             <div class="total">
-              合計<span>￥{{ transPayAmountNoTax | NumFormat }}</span>
+              合計<span>￥{{ $numFormat(transPayAmountNoTax) }}</span>
             </div>
             <ul>
               <li>
                 お支払い金額<span style="margin-right: 1px"
-                  >￥{{ transData.transPayAmount | NumFormat }}</span
+                  >￥{{ $numFormat(transData.transPayAmount) }}</span
                 >
               </li>
             </ul>
@@ -137,7 +137,7 @@
         </div>
       </div>
     </div>
-    <tab-bar cssTitle="3" />
+    <tab-bar :cssTitle="3" />
     <el-dialog
       v-model="dialogVisible"
       width="90%"
@@ -148,12 +148,14 @@
     >
       <p class="dialog-context-title">注文をキャンセルします</p>
       <p class="dialog-context">この注文をキャンセルします</p>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="info" @click="dialogVisible = false"
-          >キャンセル</el-button
-        >
-        <el-button type="danger" @click="cancelOrder()">OK</el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="info" @click="dialogVisible = false"
+            >キャンセル</el-button
+          >
+          <el-button type="danger" @click="cancelOrder()">OK</el-button>
+        </span>
+      </template>
     </el-dialog>
     <el-dialog
       v-model="cancelResultDialogVisible"

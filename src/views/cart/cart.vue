@@ -13,7 +13,7 @@
           <div class="product">{{ dataCart.goodsName }}</div>
         </div>
         <div class="price">
-          <span class="fw-b">{{ dataCart.goodsPrice | NumFormat }}円</span>
+          <span class="fw-b">{{ $numFormat(dataCart.goodsPrice) }}円</span>
           <span class="ps-14">(税込)</span>
         </div>
         <div
@@ -28,7 +28,7 @@
          >
           <div>割引:</div>
           <div style="margin-right: 50px">
-             -{{ ((dataCart.goodsPrice * this.discount) / 100) | NumFormat }}円
+             -{{ $numFormat((dataCart.goodsPrice * discount) / 100) }}円
           </div>
         </div>
         <div class="quantity">

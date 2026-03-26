@@ -30,7 +30,7 @@
               <span
                 class="fw-b"
                 v-if="item.optionStep1.selectOptionGrpPrice > 0"
-                >￥{{ item.optionStep1.selectOptionGrpPrice | NumFormat }}</span
+                >￥{{ $numFormat(item.optionStep1.selectOptionGrpPrice) }}</span
               >
             </li>
             <li
@@ -48,7 +48,7 @@
             >
               <span>氷の量：{{ item.optionStep3.selectOptionGrpName }}</span>
               <span class="fw-b" v-if="item.optionStep3.selectOptionGrpPrice"
-                >￥{{ item.optionStep3.selectOptionGrpPrice | NumFormat }}</span
+                >￥{{ $numFormat(item.optionStep3.selectOptionGrpPrice) }}</span
               >
             </li>
             <div
@@ -62,7 +62,7 @@
                     items.selectOptionGrpName
                   }}</span
                 ><span class="fw-b"
-                  >￥{{ items.selectOptionGrpPrice | NumFormat }}</span
+                  >￥{{ $numFormat(items.selectOptionGrpPrice) }}</span
                 >
               </li>
             </div>
@@ -78,7 +78,7 @@
                 </select>
               </div>
               <span class="fw-b" v-if="item.goodsPrice && item.goodsPrice > 0"
-                >￥{{ item.goodsPrice | NumFormat }}</span
+                >￥{{ $numFormat(item.goodsPrice) }}</span
               >
             </li>
           </ul>
@@ -231,7 +231,7 @@
           </div>
           <div class="choose-price">
             <p>
-              ご注文小計： <span>￥{{ allMoney | NumFormat }}</span>
+              ご注文小計： <span>￥{{ $numFormat(allMoney) }}</span>
             </p>
           </div>
           <div class="common-w">

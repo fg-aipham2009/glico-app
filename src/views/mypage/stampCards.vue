@@ -11,8 +11,8 @@
           </div>
           <div class="content-stamp dis-flex">
             <div>
-              現在<span class="fw-bold">{{ point | NumFormat }} point</span>
-              (カード<span>{{ numOfCardCompleted | NumFormat }}</span
+              現在<span class="fw-bold">{{ $numFormat(point) }} point</span>
+              (カード<span>{{ $numFormat(numOfCardCompleted) }}</span
               >枚目)
             </div>
           </div>

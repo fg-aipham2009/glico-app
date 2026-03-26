@@ -19,14 +19,14 @@
         </div>
         <div class="value mb17">
           <span class="value fs25 fw-b">
-            {{ dataProduct.goodsPrice | NumFormat }}円
+            {{ $numFormat(dataProduct.goodsPrice) }}円
           </span>
           <span class="value fs16 fw-m">(税込）</span>
         </div>
         <div class="value-discount" v-if="discount != 0">
           <span>
             割引: -{{
-              ((dataProduct.goodsPrice * this.discount) / 100) | NumFormat
+              $numFormat((dataProduct.goodsPrice * discount) / 100)
             }}円
           </span>
         </div>

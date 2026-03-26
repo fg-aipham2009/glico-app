@@ -4,11 +4,11 @@ export function setupNavigationGuards(router, { post, commonInstance }) {
 
   router.beforeEach((to, from, next) => {
     const toFullPath = to.fullPath;
+    // Giống v2 main.js: chỉ trong LINE in-app mới chạy LIFF/auth; web thường → extbrowser
     const inLineClient =
       typeof liff !== "undefined" && liff.isInClient() === true;
-    const devTreatAsLine = import.meta.env.DEV;
 
-    if (inLineClient || devTreatAsLine) {
+    if (inLineClient) {
       setUrlParamToSessionStorage(
         decodeURIComponent(decodeURIComponent(toFullPath))
       );
@@ -25,7 +25,7 @@ export function setupNavigationGuards(router, { post, commonInstance }) {
         if (import.meta.env.DEV) {
           sessionStorage.setItem("platformId", LIFF_ID);
           localStorage.setItem("openId", "Uf4cccd54a2ae6c8848e9a8136c9d018c");
-          localStorage.setItem("storeId", "1");
+          // localStorage.setItem("storeId", "1");
           getSysMStore(next);
           redirectInitMember(openId, next);
         } else {
@@ -64,6 +64,7 @@ export function setupNavigationGuards(router, { post, commonInstance }) {
         next();
       }
     } else {
+      // 外部ブラウザ — giống v2: luôn vào màn extbrowser trừ khi đang ở route đó
       if (to.name !== "extbrowser") {
         return next({ name: "extbrowser" });
       }

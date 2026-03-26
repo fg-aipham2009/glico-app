@@ -21,7 +21,7 @@
           <div class="product">{{ dataCart.goodsName }}</div>
         </div>
         <div class="price">
-          <span class="fw-b"> {{ dataCart.goodsPrice | NumFormat }}円 </span>
+          <span class="fw-b"> {{ $numFormat(dataCart.goodsPrice) }}円 </span>
           <span class="fs-16 fw-m">(税込)</span>
         </div>
         <div class="d-flex-between quantity">
@@ -32,7 +32,7 @@
         <div class="d-flex-between total">
           <div class="title-box">小計</div>
           <div class="value-total">
-            <span class="fw-b">{{ totalCouponMoney | NumFormat }}円</span>
+            <span class="fw-b">{{ $numFormat(totalCouponMoney) }}円</span>
             <span class="fs-16 fw-m">(税込)</span>
           </div>
         </div>
@@ -40,7 +40,7 @@
         <div class="d-flex-between total" v-if="discount != 0">
           <div class="title-box">割引</div>
           <div class="value-total">
-            -{{ discount | NumFormat }}円
+            -{{ $numFormat(discount) }}円
             <span class="fs-16 fw-m">(税込)</span>
           </div>
         </div>
@@ -85,8 +85,8 @@
             <!-- <span class="pl-8">(税込)</span> -->
           </div>
           <div class="text-payment">
-            <!-- <span>{{ finalTotalMoney | NumFormat }}円</span> -->
-            <span>{{ totalCouponMoney - discount | NumFormat }}円</span>
+            <!-- <span>{{ $numFormat(finalTotalMoney) }}円</span> -->
+            <span>{{ $numFormat(totalCouponMoney - discount) }}円</span>
             <span class="unit fw-m">(税込)</span>
           </div>
         </div>

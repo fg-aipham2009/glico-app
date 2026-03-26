@@ -10,15 +10,13 @@
               <img :src="dataDetail.goodsImg" alt="" />
               <div class="price fs-25">
                 <span class="fw-b"
-                  >{{ dataDetail.goodsPrice | NumFormat }}円</span
+                  >{{ $numFormat(dataDetail.goodsPrice) }}円</span
                 >
                 <span class="fs-16 fw-m">(税込)</span>
               </div>
               <div class="value-discount" v-if="discount != 0">
                 <span>
-                  割引: -{{
-                    ((dataDetail.goodsPrice * this.discount) / 100) | NumFormat
-                  }}円
+                  割引: -{{ $numFormat((dataDetail.goodsPrice * discount) / 100) }}円
                 </span>
               </div>
             </div>

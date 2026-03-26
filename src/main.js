@@ -11,6 +11,7 @@ import { bindRouter, post, get, put } from "./utils/http";
 import { $request } from "./plugins/axios.js";
 import commonClass from "./utils/common.js";
 import { setupNavigationGuards } from "./router/guards.js";
+import { numFormat, exportStatusLabel } from "./utils/formatters.js";
 
 import HeaderBar from "./components/headerBar.vue";
 import FooterBar from "./components/footerbar.vue";
@@ -38,6 +39,8 @@ app.config.globalProperties.$put = put;
 app.config.globalProperties.$request = $request;
 app.config.globalProperties.$common = commonInstance;
 app.config.globalProperties.$message = ElMessage;
+app.config.globalProperties.$numFormat = numFormat;
+app.config.globalProperties.$exportStatus = exportStatusLabel;
 
 app.component("HeaderBar", HeaderBar);
 app.component("FooterBar", FooterBar);

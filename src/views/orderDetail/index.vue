@@ -33,11 +33,11 @@
             <li><span class="w-1">注文日 :</span>{{ transData.takeDate }}</li>
             <li>
               <span class="w-1">金額 :</span>
-              {{ transData.transPayAmount | NumFormat }}円(税込)
+              {{ $numFormat(transData.transPayAmount) }}円(税込)
             </li>
             <li>
               <span class="w-1">ステータス :</span>
-              {{ transData.exportStatus | exportStatus }}
+              {{ $exportStatus(transData.exportStatus) }}
             </li>
             <li class="d-flex align-items-start">
               <span style="min-width: 70px;">受取先：</span>
@@ -62,9 +62,10 @@
               <el-col :span="24" class="text-end mb-15">
                 <span class="fs-25 fw-bold">
                   {{
-                    (transactionGoods.goodsPayAmount /
-                      transactionGoods.goodsNum)
-                      | NumFormat
+                    $numFormat(
+                      transactionGoods.goodsPayAmount /
+                        transactionGoods.goodsNum
+                    )
                   }}円
                 </span>
                 <span class="fs-14 fw-m"> (税込) </span>
