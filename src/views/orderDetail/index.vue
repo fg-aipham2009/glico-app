@@ -438,37 +438,37 @@ export default {
   text-align: center;
 }
 
-::v-deep .dialog-footer .el-button--primary {
+:deep(.dialog-footer .el-button--primary) {
   color: #fff;
   background-color: #3c0200;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .dialog-footer .el-button--default {
+:deep(.dialog-footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   padding: 0;
 }
-::v-deep .dialog-footer {
+:deep(.dialog-footer) {
   width: 100%;
   font-size: 0;
   .is-disabled {
     background: #717171 !important;
   }
 }
-::v-deep .dialog-footer .el-button + .el-button {
+:deep(.dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .dialog-footer .el-button {
+:deep(.dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;
 }
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
   background: #fffcee !important;
   padding: 70px 30px !important;
   border-top-left-radius: 10px;

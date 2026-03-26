@@ -12,11 +12,13 @@
           class="ruleForm"
         >
           <!-- Name -->
-          <el-form-item label="Name" prop="name">
-            <span class="ttl" slot="label">
-              <span>お名前</span>
-              <span class="require-field">必須</span>
-            </span>
+          <el-form-item prop="name">
+            <template #label>
+              <span class="ttl">
+                <span>お名前</span>
+                <span class="require-field">必須</span>
+              </span>
+            </template>
             <el-input
               type="text"
               v-model="formDataEdit.name"
@@ -27,11 +29,13 @@
           </el-form-item>
 
           <!-- Phone -->
-          <el-form-item label="Phone" prop="phone">
-            <span class="ttl" slot="label">
-              <span>お電話番号</span>
-              <span class="require-field">必須</span>
-            </span>
+          <el-form-item prop="phone">
+            <template #label>
+              <span class="ttl">
+                <span>お電話番号</span>
+                <span class="require-field">必須</span>
+              </span>
+            </template>
             <el-input
               placeholder="090-0000-0000"
               v-model="formDataEdit.phone"
@@ -41,11 +45,13 @@
           </el-form-item>
 
           <!-- Email -->
-          <el-form-item label="Email" prop="email">
-            <span class="ttl" slot="label">
-              <span>メールアドレス</span>
-              <span class="require-field">必須</span>
-            </span>
+          <el-form-item prop="email">
+            <template #label>
+              <span class="ttl">
+                <span>メールアドレス</span>
+                <span class="require-field">必須</span>
+              </span>
+            </template>
             <el-input
               type="text"
               placeholder="sunao@example.com"
@@ -56,11 +62,13 @@
           </el-form-item>
 
           <!-- Birthday -->
-          <el-form-item label="Birthday" prop="birthday">
-            <span class="ttl" slot="label">
-              <span>生年月日</span>
-              <span class="require-field">必須</span>
-            </span>
+          <el-form-item prop="birthday">
+            <template #label>
+              <span class="ttl">
+                <span>生年月日</span>
+                <span class="require-field">必須</span>
+              </span>
+            </template>
             <el-input
               type="text"
               placeholder="2000/01/01"
@@ -72,18 +80,22 @@
           </el-form-item>
 
           <!-- Sex -->
-          <el-form-item label="Sex" prop="sex">
-            <span class="ttl" slot="label">
-              <span>性別</span>
-              <span class="require-field">必須</span>
-            </span>
+          <el-form-item prop="sex">
+            <template #label>
+              <span class="ttl">
+                <span>性別</span>
+                <span class="require-field">必須</span>
+              </span>
+            </template>
 
             <div class="contclearfix">
               <el-radio-group v-model="formDataEdit.sex">
                 <el-radio
                   label="1"
                   :class="
-                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                    sexError && !formDataEdit.sex
+                      ? 'border-error'
+                      : 'border-suc'
                   "
                 >
                   男性
@@ -91,7 +103,9 @@
                 <el-radio
                   label="2"
                   :class="
-                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                    sexError && !formDataEdit.sex
+                      ? 'border-error'
+                      : 'border-suc'
                   "
                 >
                   女性
@@ -99,7 +113,9 @@
                 <el-radio
                   label="3"
                   :class="
-                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                    sexError && !formDataEdit.sex
+                      ? 'border-error'
+                      : 'border-suc'
                   "
                 >
                   その他
@@ -107,7 +123,9 @@
                 <el-radio
                   label="4"
                   :class="
-                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                    sexError && !formDataEdit.sex
+                      ? 'border-error'
+                      : 'border-suc'
                   "
                 >
                   回答しない
@@ -162,13 +180,18 @@
             <div class="btn-form btn-orange-main">
               <div class="border-input border-input-black">
                 <el-button
+                  size="default"
                   @click="resetForm('formDataEdit')"
                   class="btn-black-main"
                   >キャンセル</el-button
                 >
               </div>
               <div class="border-input">
-                <el-button type="primary" @click="submitForm('formDataEdit')">
+                <el-button
+                  type="primary"
+                  size="default"
+                  @click="submitForm('formDataEdit')"
+                >
                   登 録
                 </el-button>
               </div>
@@ -194,23 +217,25 @@
         style="width: 100%"
         @change="dateChange"
       />
-      <span slot="footer" class="dialog-footer">
-        <el-button
-          @click="confirmDate()"
-          size="medium"
-          :disabled="!checkBirthdayFlag"
-          :class="!checkBirthdayFlag ? 'disabled-btn' : ''"
-        >
-          確 定
-        </el-button>
-        <el-button
-          type="primary"
-          @click="showDialogChoseDate = false"
-          size="medium"
-        >
-          キャンセル
-        </el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="confirmDate()"
+            size="default"
+            :disabled="!checkBirthdayFlag"
+            :class="!checkBirthdayFlag ? 'disabled-btn' : ''"
+          >
+            確 定
+          </el-button>
+          <el-button
+            type="primary"
+            @click="showDialogChoseDate = false"
+            size="default"
+          >
+            キャンセル
+          </el-button>
+        </span>
+      </template>
     </el-dialog>
 
     <!-- Dialog Privacy Policy  -->
@@ -225,17 +250,20 @@
         <div class="content-infomation">
           <ContentPrivacy />
         </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button
-            class="cancel btn--black"
-            @click="isConfirmPrivacyPolicy(false)"
-          >
-            同意しない
-          </el-button>
-          <el-button @click="isConfirmPrivacyPolicy(true)">
-            同意する
-          </el-button>
-        </span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button
+              class="cancel btn--black"
+              size="default"
+              @click="isConfirmPrivacyPolicy(false)"
+            >
+              同意しない
+            </el-button>
+            <el-button size="default" @click="isConfirmPrivacyPolicy(true)">
+              同意する
+            </el-button>
+          </span>
+        </template>
       </el-dialog>
     </div>
   </div>
@@ -247,7 +275,8 @@ import { ElMessage as Message } from "element-plus";
 import ContentPrivacy from "@/views/mypage/contentPrivacy.vue";
 
 export default {
-  components: {    ContentPrivacy,
+  components: {
+    ContentPrivacy,
   },
   data() {
     const regexJapan = (rule, value, callback) => {
@@ -624,20 +653,22 @@ export default {
         birthday: this.formDataEdit.birthday,
         sex: this.formDataEdit.sex,
       };
-      this.$post("/customerinfo/updateTPartnerUser", data).then((response) => {
-        if (response.code == "200") {
-          // this.$message.success(response.data);
-          this.$message.success("登録完了しました");
-          this.$router.push({
-            name: "register-information",
-          });
-          // this.$refs[formName] &&
-          this.$refs[formName].resetFields();
-          sessionStorage.removeItem("information");
-        } else {
-          this.$message.error(response.msg);
-        }
-      });
+      this.$post("/customerinfo/updateTPartnerUser", data)
+        .then((response) => {
+          if (response.code == 200 || response.code === "200") {
+            this.$message.success("登録完了しました");
+            this.$router.push({
+              name: "register-information",
+            });
+            this.$refs.formDataEdit?.resetFields();
+            sessionStorage.removeItem("information");
+          } else {
+            this.$message.error(response.msg || "ERROR");
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
     // Reset Form
     resetForm(formName) {
@@ -799,7 +830,7 @@ li {
 a {
   color: #42b983;
 }
-::v-deep .picker_panel {
+:deep(.picker_panel) {
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -851,37 +882,37 @@ a {
     }
   }
 }
-::v-deep .dialog-footer .el-button--primary {
+:deep(.dialog-footer .el-button--primary) {
   color: #fff;
   background-color: #3c0200;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .dialog-footer .el-button--default {
+:deep(.dialog-footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   padding: 0;
 }
-::v-deep .dialog-footer {
+:deep(.dialog-footer) {
   width: 100%;
   font-size: 0;
   .is-disabled {
     background: #717171 !important;
   }
 }
-::v-deep .dialog-footer .el-button + .el-button {
+:deep(.dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .dialog-footer .el-button {
+:deep(.dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;
 }
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
   background: #fffcee;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

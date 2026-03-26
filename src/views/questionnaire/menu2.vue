@@ -180,12 +180,19 @@
           <el-form-item>
             <div class="btn-form btn-orange-main">
               <div class="border-input border-input-black">
-                <el-button @click="resetForm('formData')" class="btn-black-main"
+                <el-button
+                  size="default"
+                  @click="resetForm('formData')"
+                  class="btn-black-main"
                   >戻る</el-button
                 >
               </div>
               <div class="border-input">
-                <el-button type="primary" @click="submitForm('formData')">
+                <el-button
+                  type="primary"
+                  size="default"
+                  @click="submitForm('formData')"
+                >
                   次へ
                 </el-button>
               </div>
@@ -199,7 +206,7 @@
 
 <script>
 export default {
-  name: "orderDetail",
+  name: "menu2",
   data() {
     return {
       listQ7: [
@@ -271,8 +278,15 @@ export default {
   },
 
   mounted() {
-    if (sessionStorage.getItem("questionnaire2")) {
-      this.formData = JSON.parse(sessionStorage.getItem("questionnaire2"));
+    const raw = sessionStorage.getItem("questionnaire2");
+    if (!raw) return;
+    try {
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") {
+        this.formData = { ...this.formData, ...saved };
+      }
+    } catch (e) {
+      sessionStorage.removeItem("questionnaire2");
     }
   },
 
@@ -294,6 +308,11 @@ export default {
             name: "menu-questionnaire3",
           });
         } else {
+          setTimeout(() => {
+            const isError = document.getElementsByClassName("is-error");
+            const el = isError[0]?.querySelector("input, textarea, select");
+            if (el) el.focus();
+          }, 100);
           return false;
         }
       });

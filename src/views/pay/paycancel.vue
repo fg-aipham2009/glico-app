@@ -10,7 +10,7 @@
       </div>
       <div class="mb70"></div>
     </div>
-    <tab-bar cssTitle="2" />
+    <tab-bar :cssTitle="2" />
   </div>
 </template>
 
@@ -23,27 +23,24 @@ export default {
     };
   },
   mounted() {
-    var that = this;
-    console.log("-- remove cart!");
     sessionStorage.removeItem("cartGoods");
-    that.transNo = sessionStorage.getItem("orderId");
-    this.cancelPayment(that.transNo);
+    const transNo = sessionStorage.getItem("orderId");
+    this.cancelPayment(transNo);
   },
 
   methods: {
-    cancelPayment(params) {
-      var that = this;
-      //构建支付参数
-      let transNo = params;
-
-      let requestUrl = "/line/notify/cancel/" + "?transactionId=" + transNo;
-      console.log("Trying Confirm API.");
-      this.$get(requestUrl, params).then((response) => {
-        if (response.code != 200) {
-          console.log("failed to register data" + response.code);
-        }
-        console.log("Confirm API has been succeeded!");
-      });
+    cancelPayment(transNo) {
+      if (!transNo) return;
+      const requestUrl = "/line/notify/cancel/?transactionId=" + transNo;
+      this.$get(requestUrl, {})
+        .then((response) => {
+          if (response.code != 200 && response.code !== "200") {
+            console.log("failed to register data", response.code);
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
     goHome() {
       if (localStorage.getItem("storeId")) {

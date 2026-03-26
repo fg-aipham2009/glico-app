@@ -124,12 +124,19 @@
           <el-form-item>
             <div class="btn-form btn-orange-main">
               <div class="border-input border-input-black">
-                <el-button @click="resetForm('formData')" class="btn-black-main"
+                <el-button
+                  size="default"
+                  @click="resetForm('formData')"
+                  class="btn-black-main"
                   >戻る</el-button
                 >
               </div>
               <div class="border-input">
-                <el-button type="primary" @click="submitForm('formData')">
+                <el-button
+                  type="primary"
+                  size="default"
+                  @click="submitForm('formData')"
+                >
                   送信
                 </el-button>
               </div>
@@ -154,32 +161,33 @@
         style="width: 100%"
         @change="dateChange"
       />
-      <span slot="footer" class="dialog-footer">
-        <el-button
-          @click="confirmDate()"
-          size="medium"
-          :disabled="!checkQ1Flag"
-        >
-          確 定
-        </el-button>
-        <el-button
-          type="primary"
-          @click="showDialogChoseDate = false"
-          size="medium"
-        >
-          キャンセル
-        </el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="confirmDate()"
+            size="default"
+            :disabled="!checkQ1Flag"
+          >
+            確 定
+          </el-button>
+          <el-button
+            type="primary"
+            @click="showDialogChoseDate = false"
+            size="default"
+          >
+            キャンセル
+          </el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import { ElMessage as Message } from "element-plus";
+
 export default {
-  name: "orderDetail",
-  components: {},
+  name: "menu3",
   data() {
     return {
       listQ8: [
@@ -241,8 +249,6 @@ export default {
     };
   },
 
-  mounted() {},
-
   methods: {
     back() {
       this.$router.push({
@@ -287,13 +293,23 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // console.log(this.formData);
-          const questionnaire1 = JSON.parse(
-            sessionStorage.getItem("questionnaire1")
-          );
-          let questionnaire2 = JSON.parse(
-            sessionStorage.getItem("questionnaire2")
-          );
+          let questionnaire1;
+          let questionnaire2;
+          try {
+            questionnaire1 = JSON.parse(
+              sessionStorage.getItem("questionnaire1") || "null"
+            );
+            questionnaire2 = JSON.parse(
+              sessionStorage.getItem("questionnaire2") || "null"
+            );
+          } catch (e) {
+            this.$message.error("ERROR");
+            return;
+          }
+          if (!questionnaire1 || !questionnaire2) {
+            this.$message.error("ERROR");
+            return;
+          }
           questionnaire2 = {
             question6: questionnaire2.question6,
             question7: `${questionnaire2.Q71},${questionnaire2.Q72},${questionnaire2.Q73},${questionnaire2.Q74},${questionnaire2.Q75}`,
@@ -306,21 +322,26 @@ export default {
             ...questionnaire2,
             ...this.formData,
           };
-          this.$post("/feedback/addFeedback", data).then((response) => {
-            if (response.code == "200") {
-              this.$router.push({
-                name: "questionnaire-completed",
-              });
-              sessionStorage.removeItem("questionnaire1");
-              sessionStorage.removeItem("questionnaire2");
-            } else {
-              this.$message.error(response.msg);
-            }
-          });
+          this.$post("/feedback/addFeedback", data)
+            .then((response) => {
+              if (response.code == 200 || response.code === "200") {
+                this.$router.push({
+                  name: "questionnaire-completed",
+                });
+                sessionStorage.removeItem("questionnaire1");
+                sessionStorage.removeItem("questionnaire2");
+              } else {
+                this.$message.error(response.msg || "ERROR");
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
         } else {
           setTimeout(() => {
             var isError = document.getElementsByClassName("is-error");
-            isError[0].querySelector("input").focus();
+            const el = isError[0]?.querySelector("input, textarea, select");
+            if (el) el.focus();
           }, 100);
           return false;
         }
@@ -419,7 +440,7 @@ export default {
     margin-bottom: 35px;
   }
 }
-::v-deep .picker_panel {
+:deep(.picker_panel) {
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -471,37 +492,37 @@ export default {
     }
   }
 }
-::v-deep .dialog-footer .el-button--primary {
+:deep(.dialog-footer .el-button--primary) {
   color: #fff;
   background-color: #3c0200;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .dialog-footer .el-button--default {
+:deep(.dialog-footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   padding: 0;
 }
-::v-deep .dialog-footer {
+:deep(.dialog-footer) {
   width: 100%;
   font-size: 0;
   .is-disabled {
     background: #717171 !important;
   }
 }
-::v-deep .dialog-footer .el-button + .el-button {
+:deep(.dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .dialog-footer .el-button {
+:deep(.dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;
 }
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
   background: #fffcee;
   border-radius: 5px;
 }

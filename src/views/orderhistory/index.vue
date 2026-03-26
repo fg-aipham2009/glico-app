@@ -39,7 +39,7 @@
               <li><span>注文番号：</span> M{{ item.transConfirmNo }}</li>
               <li><span>注文日：</span>{{ item.takeDate }}</li>
               <li>
-                <span>金額：</span>{{ item.transPayAmount | NumFormat }}円
+                <span>金額：</span>{{ formatNum(item.transPayAmount) }}円
                 (税込)
               </li>
             </ul>
@@ -91,11 +91,16 @@ export default {
     this.getUserAuthInfo();
   },
 
-  destroyed() {
+  beforeUnmount() {
     this.$parent.changeTabBarCss(0);
   },
 
   methods: {
+    formatNum(val) {
+      if (val == null || val === "") return "";
+      const n = Number(val);
+      return Number.isFinite(n) ? n.toLocaleString("ja-JP") : String(val);
+    },
     back() {
       history.back();
     },
@@ -117,22 +122,31 @@ export default {
         current: this.current,
         size: 5,
       };
-      this.$post("/transaction/getTransactionList", par).then((res) => {
-        this.data = res.records;
-        this.pages = res.pages;
-        this.total = res.total;
-        this.$post("/transaction/getGoodsImgByTransNo", res.records).then(
-          (res) => {
-            for (let i = 0; i < this.data.length; i++) {
-              for (let j = 0; j < res.length; j++) {
-                if (this.data[i].transNo == res[j].transNo) {
-                  this.data[i].goodsImg = res[j].goodsImg;
+      this.$post("/transaction/getTransactionList", par)
+        .then((res) => {
+          this.data = res.records || [];
+          this.pages = res.pages;
+          this.total = res.total;
+          const records = res.records || [];
+          if (records.length === 0) return;
+          this.$post("/transaction/getGoodsImgByTransNo", records)
+            .then((imgList) => {
+              if (!Array.isArray(imgList)) return;
+              for (let i = 0; i < this.data.length; i++) {
+                for (let j = 0; j < imgList.length; j++) {
+                  if (this.data[i].transNo == imgList[j].transNo) {
+                    this.data[i].goodsImg = imgList[j].goodsImg;
+                  }
                 }
               }
-            }
-          }
-        );
-      });
+            })
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
+        })
+        .catch((err) => {
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
 
     selectOrderInfo(data) {
@@ -149,7 +163,7 @@ export default {
       };
       this.$post("/mypage/getUserAuthInfo", params)
         .then((response) => {
-          if ((response.code = 200)) {
+          if (response.code === 200) {
             if (response.data) {
               this.userinfo = {
                 // 授权用户ID
@@ -177,8 +191,7 @@ export default {
           }
         })
         .catch((err) => {
-          // request error
-          console.log(err);
+          this.$message.error(err.response?.data?.msg || "ERROR");
         });
     },
   },

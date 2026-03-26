@@ -51,14 +51,18 @@
         </div>
       </div>
     </div>
-    <tab-bar cssTitle="0" />
+    <tab-bar :cssTitle="0" />
   </div>
 </template>
 
 <script>
-  export default {
-    name: "storeDetail"
-  };
+export default {
+  name: "storeDetail",
+  mounted() {
+    const t = this.$route.meta?.title;
+    if (t) document.title = t;
+  },
+};
 </script>
 
 <style scoped>

@@ -413,29 +413,29 @@ export default {
   text-align: center;
 }
 
-::v-deep .dialog-css .dialog-footer .el-button--danger {
+:deep(.dialog-css .dialog-footer .el-button--danger) {
   color: #fff;
   background-color: #c10230;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .dialog-css .dialog-footer .el-button--info {
+:deep(.dialog-css .dialog-footer .el-button--info) {
   color: #fff;
   background-color: #a8a8a8;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .dialog-css .el-dialog__footer {
+:deep(.dialog-css .el-dialog__footer) {
   padding: 0;
 }
-::v-deep .dialog-css .dialog-footer {
+:deep(.dialog-css .dialog-footer) {
   width: 100%;
   font-size: 0;
 }
-::v-deep .dialog-css .dialog-footer .el-button + .el-button {
+:deep(.dialog-css .dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .dialog-css .dialog-footer .el-button {
+:deep(.dialog-css .dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;

@@ -62,5 +62,12 @@ export default defineConfig(({ mode }) => {
       assetsDir: "static",
       sourcemap: true,
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: "modern-compiler",
+        },
+      },
+    },
   };
 });

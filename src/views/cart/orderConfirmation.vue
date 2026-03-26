@@ -123,11 +123,11 @@
           <div class="text-confirm fw-m">
             キャンセルは配送当日の <br />午前９時までとなります
           </div>
-          <div slot="footer">
-            <el-button @click="confirmOrder()" :disabled="disabledButtonOrder" size="medium" type="uniqe">
+          <template #footer>
+            <el-button @click="confirmOrder()" :disabled="disabledButtonOrder" size="default" type="uniqe">
               OK
             </el-button>
-          </div>
+          </template>
         </el-dialog>
       </div>
     </div>
@@ -282,6 +282,8 @@ export default {
         limit_second: "",
         hashkey: process.env.SB_HASH_KEY,
         sps_hashcode: "",
+        tds2infoToken: "",
+        tds2infoTokenKey: "",
       },
       OrderDetail: {
         dtl_rowno: "",
@@ -419,7 +421,7 @@ export default {
           }).catch((err) => {
             this.disabledButtonOrder = false;
             this.setLoading(false);
-            this.$message.error(err.response.data.msg || "ERROR")
+            this.$message.error(err.response?.data?.msg || "ERROR");
           });
         } else {
           this.setLoading(false);
@@ -463,70 +465,53 @@ export default {
       this.form = this.$refs.cgform;
       let sha1 = require("js-sha1");
       let Base64 = require("js-base64").Base64;
-      if (this.dataCart.pay_method === 'credit3d2') {
-        this.$set(this.formData, 'tds2infoToken', this.tds2infoToken)
-        this.$set(this.formData, 'tds2infoTokenKey', this.tds2infoTokenKey)
+      if (this.dataCart.pay_method === "credit3d2") {
+        this.formData.tds2infoToken = this.tds2infoToken;
+        this.formData.tds2infoTokenKey = this.tds2infoTokenKey;
       }
-      this.$set(this.formData, "order_id", transNo);
-      this.$set(this.formData, "item_id", goodsId);
-      this.$set(this.formData, "item_name", goodsName);
-      this.$set(this.formData, "cust_code", localStorage.getItem("openId"));
-      this.$set(this.formData, "pay_method", this.dataCart.method_pay);
-      this.$set(
-        this.formData,
-        "amount",
-        Math.floor(this.totalCouponMoney - this.discount)
+      this.formData.order_id = transNo;
+      this.formData.item_id = goodsId;
+      this.formData.item_name = goodsName;
+      this.formData.cust_code = localStorage.getItem("openId");
+      this.formData.pay_method = this.dataCart.method_pay;
+      this.formData.amount = Math.floor(
+        this.totalCouponMoney - this.discount
       );
-      this.$set(
-        this.formData,
-        "request_date",
-        moment().utcOffset("+09:00").format("YYYYMMDDHHmmss")
-      );
+      this.formData.request_date = moment()
+        .utcOffset("+09:00")
+        .format("YYYYMMDDHHmmss");
       let storeData = localStorage.getItem("storeData");
       if (storeData) {
         storeData = JSON.parse(storeData);
         let storeId = localStorage.getItem("storeId");
         let merchantId = storeData.sbPaymentMerchantId;
-        this.$set(this.formData, "merchant_id", process.env.SB_MERCHANT_ID);
-        this.$set(this.formData, "service_id", process.env.SB_SERVICE_ID);
+        this.formData.merchant_id = process.env.SB_MERCHANT_ID;
+        this.formData.service_id = process.env.SB_SERVICE_ID;
         // this.$set(
         //   this.formData,
         //   "hashkey",
         //   "2c77945fc5c4de6c3610dceda28126a81bca18be"
         // );
-        this.$set(
-          this.formData,
-          "success_url",
-          process.env.SB_SUCCESS_URL + storeId + "/" + transNo
-        );
-        this.$set(
-          this.formData,
-          "cancel_url",
-          process.env.SB_CANCEL_URL + +storeId + "/" + transNo
-        );
-        this.$set(
-          this.formData,
-          "error_url",
-          process.env.SB_ERROR_URL + storeId + "/" + transNo
-        );
-        this.$set(
-          this.formData,
-          "pagecon_url",
+        this.formData.success_url =
+          process.env.SB_SUCCESS_URL + storeId + "/" + transNo;
+        this.formData.cancel_url =
+          process.env.SB_CANCEL_URL + +storeId + "/" + transNo;
+        this.formData.error_url =
+          process.env.SB_ERROR_URL + storeId + "/" + transNo;
+        this.formData.pagecon_url =
           process.env.SB_PAGECON_URL +
-            storeId +
-            "/" +
-            this.dataCart.num +
-            "/" +
-            this.dataCart.sellDate
-        );
+          storeId +
+          "/" +
+          this.dataCart.num +
+          "/" +
+          this.dataCart.sellDate;
       }
       var s1 = this.getOrderStr();
-      this.$set(
-        this.formData,
-        "free_csv",
-        Base64.encode(this.formData.free_csv_input, 1)
+      this.formData.free_csv = Base64.encode(
+        this.formData.free_csv_input,
+        1
       );
-      this.$set(this.formData, "sps_hashcode", sha1(s1));
+      this.formData.sps_hashcode = sha1(s1);
       this.$forceUpdate();
       setTimeout(() => {
         let form = document.getElementById("cgform");
@@ -802,21 +787,21 @@ export default {
   margin: 20px 0;
   text-align: center;
 }
-::v-deep .el-dialog {
+:deep(.el-dialog) {
   background: #fffcee;
 }
-::v-deep .el-dialog__footer .el-button--uniqe {
+:deep(.el-dialog__footer .el-button--uniqe) {
   color: #fff;
   background-color: #ff7101;
   border-color: #c10230;
   border-radius: 0 0 6px 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   width: 100%;
   font-size: 0;
   padding: 0;
 }
-::v-deep .el-dialog__footer .el-button--uniqe {
+:deep(.el-dialog__footer .el-button--uniqe) {
   width: 100%;
   border: 0;
   padding: 16px 20px;

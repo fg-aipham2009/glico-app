@@ -268,12 +268,14 @@
       <p style="margin-bottom: 50px; font-size: 14px">
         選択した商品を注文リストから消去します
       </p>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="info" @click="dialogVisible = false"
-          >キャンセル</el-button
-        >
-        <el-button type="danger" @click="delGoodsCommit()">OK</el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="info" @click="dialogVisible = false"
+            >キャンセル</el-button
+          >
+          <el-button type="danger" @click="delGoodsCommit()">OK</el-button>
+        </span>
+      </template>
     </el-dialog>
 
     <el-dialog
@@ -283,23 +285,25 @@
       center
       class="dialog-css"
     >
-      <span slot="footer" class="dialog-footer">
-        <p style="font-size: 14px">お客様情報を登録してください。</p>
-        <el-button
-          type="info"
-          size="small"
-          class="pop_text"
-          @click="dia_inquiry_visible = false"
-          >キャンセル</el-button
-        >
-        <el-button
-          type="danger"
-          size="small"
-          class="pop_text"
-          @click="custominfo()"
-          >OK</el-button
-        >
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <p style="font-size: 14px">お客様情報を登録してください。</p>
+          <el-button
+            type="info"
+            size="small"
+            class="pop_text"
+            @click="dia_inquiry_visible = false"
+            >キャンセル</el-button
+          >
+          <el-button
+            type="danger"
+            size="small"
+            class="pop_text"
+            @click="custominfo()"
+            >OK</el-button
+          >
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -1036,14 +1040,14 @@ export default {
   margin: 0 20px;
 }
 
-.receive_time >>> .el-input__inner {
+.receive_time :deep(.el-input__inner) {
   border: 1px solid #933639;
   height: 25px;
   border-radius: 13px;
   line-height: 25px;
 }
 
-.receive_time >>> .el-input__icon {
+.receive_time :deep(.el-input__icon) {
   line-height: 25px;
 }
 
@@ -1164,34 +1168,34 @@ export default {
   padding-top: 5px;
 }
 
-::v-deep .dialog-css .dialog-footer .el-button--danger {
+:deep(.dialog-css .dialog-footer .el-button--danger) {
   color: #fff;
   background-color: #c10230;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
 
-::v-deep .dialog-css .dialog-footer .el-button--info {
+:deep(.dialog-css .dialog-footer .el-button--info) {
   color: #fff;
   background-color: #a8a8a8;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
 
-::v-deep .dialog-css .el-dialog__footer {
+:deep(.dialog-css .el-dialog__footer) {
   padding: 0;
 }
 
-::v-deep .dialog-css .dialog-footer {
+:deep(.dialog-css .dialog-footer) {
   width: 100%;
   font-size: 0;
 }
 
-::v-deep .dialog-css .dialog-footer .el-button + .el-button {
+:deep(.dialog-css .dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
 
-::v-deep .dialog-css .dialog-footer .el-button {
+:deep(.dialog-css .dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;

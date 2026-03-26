@@ -149,12 +149,19 @@
           <el-form-item>
             <div class="btn-form btn-orange-main">
               <div class="border-input border-input-black">
-                <el-button @click="resetForm('formData')" class="btn-black-main"
+                <el-button
+                  size="default"
+                  @click="resetForm('formData')"
+                  class="btn-black-main"
                   >キャンセル</el-button
                 >
               </div>
               <div class="border-input">
-                <el-button type="primary" @click="submitForm('formData')">
+                <el-button
+                  type="primary"
+                  size="default"
+                  @click="submitForm('formData')"
+                >
                   送信
                 </el-button>
               </div>
@@ -168,7 +175,7 @@
 
 <script>
 export default {
-  name: "orderDetail",
+  name: "service",
   data() {
     return {
       listQ3: [
@@ -225,8 +232,6 @@ export default {
     };
   },
 
-  mounted() {},
-
   methods: {
     // Submit Form
     submitForm(formName) {
@@ -238,19 +243,24 @@ export default {
             questionName: "サービスアンケート",
             ...this.formData,
           };
-          this.$post("/feedback/addFeedback", data).then((response) => {
-            if (response.code == "200") {
-              this.$router.push({
-                name: "questionnaire-completed",
-              });
-            } else {
-              this.$message.error(response.msg);
-            }
-          });
+          this.$post("/feedback/addFeedback", data)
+            .then((response) => {
+              if (response.code == 200 || response.code === "200") {
+                this.$router.push({
+                  name: "questionnaire-completed",
+                });
+              } else {
+                this.$message.error(response.msg || "ERROR");
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
         } else {
           setTimeout(() => {
             var isError = document.getElementsByClassName("is-error");
-            isError[0].querySelector("input").focus();
+            const el = isError[0]?.querySelector("input, textarea, select");
+            if (el) el.focus();
           }, 100);
           return false;
         }

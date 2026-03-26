@@ -55,16 +55,16 @@
         top="30vh"
         center
       >
-        <div slot="footer">
+        <template #footer>
           <div class="text-complete-order">
             キャンセルは配送当日の <br />
             午前9時までとなります
           </div>
 
-          <el-button @click="showDialogCompleteOrder = false" size="medium">
+          <el-button @click="showDialogCompleteOrder = false" size="default">
             はい
           </el-button>
-        </div>
+        </template>
       </el-dialog>
     </div>
   </div>
@@ -72,13 +72,8 @@
 
 <script>
 import moment from "moment";
-import loginVue from "../authen/login.vue";
+
 export default {
-  data () {
-    return {
-      transNoQuery: ''
-    }
-  },
   mounted() {
     document.title = "注文完了";
     this.transNoQuery = this.$route.query.transNo
@@ -324,6 +319,7 @@ export default {
   },
   data() {
     return {
+      transNoQuery: "",
       showDialogCompleteOrder: false,
       dataCompleted: "",
       sellDate: "",
@@ -478,23 +474,23 @@ export default {
     font-size: 20px;
     margin: 50px 0 70px;
   }
-  ::v-deep .el-dialog {
+  :deep(.el-dialog) {
     background: #fffcee;
   }
-  ::v-deep .el-dialog__footer .el-button--default {
+  :deep(.el-dialog__footer .el-button--default) {
     color: #fff;
     background-color: #ff7101;
     border-color: #a8a8a8;
     border-radius: 0 0 0 6px;
   }
-  ::v-deep .el-dialog__footer {
+  :deep(.el-dialog__footer) {
     padding: 0;
   }
-  ::v-deep .el-dialog__footer {
+  :deep(.el-dialog__footer) {
     width: 100%;
     font-size: 0;
   }
-  ::v-deep .el-dialog__footer .el-button {
+  :deep(.el-dialog__footer .el-button) {
     width: 100%;
     border: 0;
     padding: 16px 20px;

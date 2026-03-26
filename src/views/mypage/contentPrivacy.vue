@@ -555,8 +555,8 @@
                   (https://www.glico.com/assets/files/sunaodelivery-policy.pdf)
                 </p>
               </div>
-              に従って取り扱うものとします。</el-col
-            >
+              に従って取り扱うものとします。
+            </el-col>
           </el-row>
         </div>
       </div>

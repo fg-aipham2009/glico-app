@@ -111,8 +111,8 @@ export default {
           this.canRedirect = true
         }
       } catch (error) {
-        let msgError = error.response.data.msg || 'Error'
-        this.$message.error(msgError)
+        const msgError = error.response?.data?.msg || "Error";
+        this.$message.error(msgError);
       }
     },
     handleDisplayListStore () {
@@ -153,8 +153,8 @@ export default {
         }
         await apiStore.saveAccessLog(params)
       } catch (error) {
-        let msgError = error.response.data.msg
-        this.$message.error(msgError)
+        const msgError = error.response?.data?.msg || "Error";
+        this.$message.error(msgError);
       }
     },
     async getSysMStore () {
@@ -169,8 +169,8 @@ export default {
         localStorage.setItem("storeData", JSON.stringify(this.resDataStore))
         this.setBackGroundColor(this.resDataStore)
       } catch (error) {
-        let msgError = error.response.data.msg || 'Error'
-        this.$message.error(msgError)
+        const msgError = error.response?.data?.msg || "Error";
+        this.$message.error(msgError);
       }
     }
   },
@@ -179,7 +179,7 @@ export default {
 <style lang="scss" scoped>
 .confirmation-delivery {
   .storename {
-  font-size: unquote("clamp(0.75rem, -0.101rem + 4.26vw, 1rem)");
+  font-size: clamp(0.75rem, -0.101rem + 4.26vw, 1rem);
   }
   .text {
     margin: 20px auto;

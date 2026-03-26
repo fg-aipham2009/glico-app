@@ -18,13 +18,10 @@
 <script>
 export default {
   name: "completed",
-  data() {
-    return {};
+  mounted() {
+    const t = this.$route.meta?.title;
+    if (t) document.title = t;
   },
-
-  mounted() {},
-
-  methods: {},
 };
 </script>
 

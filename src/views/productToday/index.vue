@@ -15,7 +15,7 @@
             <div class="img-product">
               <img :src="dataDetail.goodsImg" alt="" />
               <div class="price fw-m fs-25">
-                {{ dataDetail.goodsPrice | NumFormat }}円
+                {{ formatNum(dataDetail.goodsPrice) }}円
                 <span class="fs-12 fw-m">(税込)</span>
               </div>
             </div>
@@ -32,13 +32,13 @@
         <div class="custom-vue-editor ql-snow" v-html="dataDetail.goodsDesc"></div>
         <div class="next-menu mt-10">
           <div class="next-item fw-b">
-            <div @click="number == 2 || number == 3 ? nextMenu(false) : ''">
+            <div @click="number === 2 || number === 3 ? nextMenu(false) : ''">
               ＜＜前日分
             </div>
           </div>
           <div class="fw-b" @click="getDate()">本日分</div>
           <div class="next-item fw-b">
-            <div @click="number == 2 || number == 1 ? nextMenu(true) : ''">
+            <div @click="number === 2 || number === 1 ? nextMenu(true) : ''">
               当日分＞＞
             </div>
           </div>
@@ -50,36 +50,44 @@
 </template>
 <script>
 import moment from "moment";
+
 export default {
   data() {
     return {
-      dataProduct: "",
+      dataProduct: null,
       createTime: "",
       dataDetail: {
         goodsImg: "",
         goodsName: "",
         goodsDesc: "",
+        goodsPrice: "",
+        sellDate: "",
       },
       openOrder: false,
       number: 2,
     };
   },
-  components: {},
-
   mounted() {
     this.getDate();
   },
   methods: {
+    formatNum(val) {
+      if (val == null || val === "") return "";
+      const n = Number(val);
+      return Number.isFinite(n) ? n.toLocaleString("ja-JP") : String(val);
+    },
     getDate() {
       this.getProduct(moment().format("YYYY-MM-DD"));
       this.number = 2;
     },
     nextMenu(value) {
-      if (this.number == 2) {
+      if (this.number === 2) {
         if (value) {
-          this.getProduct(moment().add(1, "days").format("YYYY-MM-DD"));
+          this.getProduct(moment().clone().add(1, "days").format("YYYY-MM-DD"));
         } else {
-          this.getProduct(moment().subtract(1, "days").format("YYYY-MM-DD"));
+          this.getProduct(
+            moment().clone().subtract(1, "days").format("YYYY-MM-DD")
+          );
         }
       } else {
         this.getProduct(moment().format("YYYY-MM-DD"));
@@ -94,24 +102,46 @@ export default {
       let param = {
         sellDate: sellDate,
       };
-      this.$post("/goods/goodsByDate", param).then((res) => {
-        if ((res.data || []).length !== 0) {
-          this.dataProduct = res.data[0];
-        }
-        this.getProductDetail();
-      });
+      this.$post("/goods/goodsByDate", param)
+        .then((res) => {
+          const list = res.data || [];
+          if (list.length !== 0) {
+            this.dataProduct = list[0];
+            this.getProductDetail();
+          } else {
+            this.dataProduct = null;
+            this.dataDetail = {
+              goodsImg: "",
+              goodsName: "",
+              goodsDesc: "",
+              goodsPrice: "",
+              sellDate: "",
+            };
+            this.createTime = "";
+          }
+        })
+        .catch((err) => {
+          this.dataProduct = null;
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
     getProductDetail() {
+      const goodsId = this.dataProduct?.goodsId;
+      if (!goodsId) return;
       let param = {
-        goodsId: this.dataProduct.goodsId,
+        goodsId: goodsId,
       };
-      this.$post("/goods/goodsById", param).then((res) => {
-        this.dataDetail = res.data;
-        moment.locale("ja");
-        this.createTime = moment(this.dataDetail.sellDate).format(
-          "MM月DD日(ddd)"
-        );
-      });
+      this.$post("/goods/goodsById", param)
+        .then((res) => {
+          this.dataDetail = res.data || this.dataDetail;
+          moment.locale("ja");
+          this.createTime = moment(this.dataDetail.sellDate).format(
+            "MM月DD日(ddd)"
+          );
+        })
+        .catch((err) => {
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
   },
 };

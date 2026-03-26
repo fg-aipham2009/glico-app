@@ -67,7 +67,7 @@
     <div class="law-title">お問い合わせ先</div>
     <div class="contact-information">
       <div class="glico-customer-center">グリコお客様センター</div>
-      <div class="phone"><a href="tel:+0120917111">0120-917-111</a></div>
+      <div class="phone"><a href="tel:0120917111">0120-917-111</a></div>
       <div class="time">受付時間(9:00〜18:30)</div>
       <div class="address">
         〒555-8502 <br />
@@ -82,7 +82,6 @@
 </template>
 <script>
 export default {
-  methods: {},
   mounted() {
     this.$parent.changeTabBarCss(0);
   },

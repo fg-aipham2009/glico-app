@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <tabBar cssTitle="4"/>
+    <tab-bar :cssTitle="4" />
   </div>
 </template>
 
@@ -48,7 +48,7 @@
         data () {
           return {
             memberCouponList:[],
-            memberStampData:[],
+            memberStampData: {},
             //枚目数
             pointPage:'',
             pointCount:'',
@@ -57,11 +57,8 @@
 
           }
         },
-        mounted () {
-
-          this.$router.afterEach(() => {
-            window.scrollTo(0, 0)
-          })
+        mounted() {
+          window.scrollTo(0, 0);
         },
       created(){
         this.searchMemberPointNum();
@@ -71,70 +68,71 @@
       },
       methods:{
 
-        searchMemberPointNum(){
+        searchMemberPointNum() {
           const that = this;
           let param = {
-            'memberId':that.memberId
-          }
-          this.$post('/mo/member/getMemberPointNum',param)
+            memberId: that.memberId,
+          };
+          this.$post("/mo/member/getMemberPointNum", param)
             .then((response) => {
-              if (response.code == 200){
-                if (response.data != null && response.data != "null"){
-                  //先求出多少枚数
-                  //如果正好只有0点
-                  if (parseInt(response.data) === 0) {
+              if (response.code == 200 || response.code === "200") {
+                if (response.data != null && response.data != "null") {
+                  const total = parseInt(response.data, 10);
+                  if (total === 0) {
                     this.pointPage = 1;
                     this.pointCount = 0;
                   } else {
-                    if (parseInt(response.data) % 10 === 0) {
-                      this.pointPage = parseInt(response.data)/10;
-                    }else {
-                      this.pointPage = Math.ceil(parseInt(response.data)/10);
+                    if (total % 10 === 0) {
+                      this.pointPage = total / 10;
+                    } else {
+                      this.pointPage = Math.ceil(total / 10);
                     }
-                    //2.再求出多少点数
-                    if ( parseInt(response.data) % 10 == 0) {
+                    if (total % 10 === 0) {
                       this.pointCount = 10;
                     } else {
-                      this.pointCount = parseInt(response.data) % 10;
+                      this.pointCount = total % 10;
                     }
                   }
-                  console.log(this.pointPage);
-                  console.log(this.pointCount)
-                }else {
+                } else {
                   this.pointPage = 1;
                   this.pointCount = 0;
                 }
-
               }
             })
-
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
         },
-        searchDrinkAndToppingStampSetRules(){
+        searchDrinkAndToppingStampSetRules() {
           let that = this;
-            let param = {
-              'memberId':that.memberId
-            }
-            this.$post('/memberStampConfig/getDrinkAndToppingStampSetRules', param)
-              .then((response) => {
-                if (response.code == 200) {
-                  that.memberStampData = response.data;
-                }
-              })
-
-        },
-        searchCouponList(){
-          let that = this;
-            let param = {
-              'memberId':that.memberId
-            }
-
-          that.$post('/memberCoupon/getMemberCouponList',param)
+          let param = {
+            memberId: that.memberId,
+          };
+          this.$post("/memberStampConfig/getDrinkAndToppingStampSetRules", param)
             .then((response) => {
-              if (response.code == 200){
-                that.memberCouponList = response.data;
+              if (response.code == 200 || response.code === "200") {
+                that.memberStampData = response.data || {};
               }
             })
-
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
+        },
+        searchCouponList() {
+          let that = this;
+          let param = {
+            memberId: that.memberId,
+          };
+          that
+            .$post("/memberCoupon/getMemberCouponList", param)
+            .then((response) => {
+              if (response.code == 200 || response.code === "200") {
+                that.memberCouponList = response.data || [];
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err.response?.data?.msg || "ERROR");
+            });
         }
       }
     }

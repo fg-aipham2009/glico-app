@@ -110,7 +110,7 @@ export default {
     this.getProductDetail();
     this.getDiscount();
   },
-  destroyed() {
+  beforeUnmount() {
     sessionStorage.removeItem("orderComplete");
     sessionStorage.removeItem("exportStatus");
   },

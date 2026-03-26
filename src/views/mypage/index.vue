@@ -67,9 +67,7 @@ export default {
     };
   },
 
-  created() {},
-
-  destroyed() {
+  beforeUnmount() {
     this.$parent.changeTabBarCss(0);
   },
 
@@ -89,7 +87,7 @@ export default {
       that
         .$post("/mypage/getUserAuthInfo", params)
         .then((response) => {
-          if ((response.code = 200)) {
+          if (response.code === 200) {
             if (response.data) {
               this.userinfo = {
                 // 授权用户ID
@@ -116,8 +114,7 @@ export default {
           }
         })
         .catch((err) => {
-          // request error
-          console.log(err);
+          this.$message.error(err.response?.data?.msg || "ERROR");
         });
     },
     // 菜单页面跳转

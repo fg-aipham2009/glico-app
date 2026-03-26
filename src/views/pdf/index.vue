@@ -4,11 +4,9 @@
   </div>
 </template>
 <script>
-import moment from 'moment';
+import moment from "moment";
+
 export default {
-  created() {
-    this.getUrlpdf();
-  },
   data() {
     return {
       pathname: "",
@@ -16,22 +14,33 @@ export default {
       url: "",
     };
   },
+  created() {
+    this.getUrlpdf();
+  },
   methods: {
     getUrlpdf() {
-      this.pathname = window.location.pathname.slice(5)
-      if (this.pathname == 'thismonth') {
-        this.pathname = moment().format('YYYYMM');
-      } else if(this.pathname == 'nextmonth'){
-        this.pathname = moment().add(1, 'month').format('YYYYMM');
+      this.pathname = this.$route.params.id || "";
+      if (!this.pathname) {
+        this.$message.error("パラメータが不正です");
+        return;
       }
-      this.$post("/goodsMonth/goodsMonthById/" + this.pathname).then(
-        (response) => {
-          // setTimeout(() => {
-          //   this.url = response.data.monthUrl;
-          // });
-          window.open(response.data.monthUrl, "_self");
-        }
-      );
+      if (this.pathname === "thismonth") {
+        this.pathname = moment().format("YYYYMM");
+      } else if (this.pathname === "nextmonth") {
+        this.pathname = moment().add(1, "month").format("YYYYMM");
+      }
+      this.$post("/goodsMonth/goodsMonthById/" + this.pathname)
+        .then((response) => {
+          const url = response?.data?.monthUrl;
+          if (!url) {
+            this.$message.error("PDFが見つかりません");
+            return;
+          }
+          window.open(url, "_self");
+        })
+        .catch((err) => {
+          this.$message.error(err.response?.data?.msg || "ERROR");
+        });
     },
   },
 };

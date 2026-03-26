@@ -27,7 +27,7 @@
           <div class="guideitem">
             <div class="ttl">客席</div>
             <div class="text">
-              {{ data.guestSeatFlag == 0 ? "あり" : "なし" }}
+              {{ data.guestSeatFlag === 0 || data.guestSeatFlag === "0" ? "あり" : "なし" }}
             </div>
           </div>
           <div class="guideitem">
@@ -52,7 +52,7 @@
       <footer-bar />
     </div>
 
-    <tab-bar cssTitle="0" />
+    <tab-bar :cssTitle="0" />
   </div>
 </template>
 
@@ -80,12 +80,10 @@ export default {
         storeId: localStorage.getItem("storeId"),
       };
       that.$post("/mo/sysMStore/getSysMStore", par).then((res) => {
+        if (!res) return;
+        that.location = "";
         that.data = res;
-        if (res) {
-          localStorage.setItem("storeData", JSON.stringify(res));
-        }
-
-        debugger;
+        localStorage.setItem("storeData", JSON.stringify(res));
         let storeState = res.storeState;
         if (storeState) {
           that.location += storeState;
@@ -110,16 +108,26 @@ export default {
         if (storeLocation) {
           that.location += " " + storeLocation;
         }
-        const date = new Date(res.createTime);
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let day = date.getDate();
-        that.data.createTime = year + "年" + month + "月" + day + "日";
+        if (res.createTime) {
+          const date = new Date(res.createTime);
+          if (!Number.isNaN(date.getTime())) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            that.data.createTime = year + "年" + month + "月" + day + "日";
+          }
+        }
+      })
+      .catch((err) => {
+        that.$message.error(err.response?.data?.msg || "ERROR");
       });
     },
     showFile(fileUrl) {
-      if (liff.id != null) {
+      if (!fileUrl) return;
+      if (typeof liff !== "undefined" && liff != null && liff.id != null) {
         liff.openWindow({ url: fileUrl, external: true });
+      } else {
+        window.open(fileUrl, "_blank", "noopener,noreferrer");
       }
     },
   },

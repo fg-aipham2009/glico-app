@@ -66,9 +66,9 @@
         top="30vh"
       >
         <p class="text-confirm fw-m">注文受付時間<br />前日13時〜当日9時まで</p>
-        <div slot="footer">
-          <el-button @click="confirmOrderTime()" size="medium">OK </el-button>
-        </div>
+        <template #footer>
+          <el-button @click="confirmOrderTime()" size="default">OK </el-button>
+        </template>
       </el-dialog>
     </div> -->
   </div>
@@ -91,7 +91,7 @@ export default {
     };
   },
 
-  destroyed() {
+  beforeUnmount() {
     this.$parent.changeTabBarCss(0);
   },
 
@@ -360,21 +360,21 @@ export default {
   margin: 20px 0;
   text-align: center;
 }
-::v-deep .el-dialog {
+:deep(.el-dialog) {
   background: #fffcee;
 }
-::v-deep .el-dialog__footer .el-button--default {
+:deep(.el-dialog__footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 6px 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   width: 100%;
   font-size: 0;
   padding: 0;
 }
-::v-deep .el-dialog__footer .el-button {
+:deep(.el-dialog__footer .el-button) {
   width: 100%;
   border: 0;
   padding: 16px 20px;

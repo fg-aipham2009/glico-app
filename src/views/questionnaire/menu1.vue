@@ -45,12 +45,12 @@
                   /> -->
                   <el-date-picker
                     type="date"
-                    format="yyyy/MM/dd"
+                    format="YYYY/MM/DD"
+                    value-format="YYYY/MM/DD"
                     placeholder="例）2000/01/01"
                     autocomplete="off"
                     v-model="formData.question1"
-                  >
-                  </el-date-picker>
+                  />
                   <!-- <el-input
                     type="text"
                     placeholder="回答を記入してください"
@@ -156,12 +156,19 @@
           <el-form-item>
             <div class="btn-form btn-orange-main">
               <div class="border-input border-input-black">
-                <el-button @click="resetForm('formData')" class="btn-black-main"
+                <el-button
+                  size="default"
+                  @click="resetForm('formData')"
+                  class="btn-black-main"
                   >戻る</el-button
                 >
               </div>
               <div class="border-input">
-                <el-button type="primary" @click="submitForm('formData')">
+                <el-button
+                  type="primary"
+                  size="default"
+                  @click="submitForm('formData')"
+                >
                   次へ
                 </el-button>
               </div>
@@ -186,32 +193,33 @@
         style="width: 100%"
         @change="dateChange"
       />
-      <span slot="footer" class="dialog-footer">
-        <el-button
-          @click="confirmDate()"
-          size="medium"
-          :disabled="!checkQ1Flag"
-        >
-          確 定
-        </el-button>
-        <el-button
-          type="primary"
-          @click="showDialogChoseDate = false"
-          size="medium"
-        >
-          キャンセル
-        </el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button
+            @click="confirmDate()"
+            size="default"
+            :disabled="!checkQ1Flag"
+          >
+            確 定
+          </el-button>
+          <el-button
+            type="primary"
+            @click="showDialogChoseDate = false"
+            size="default"
+          >
+            キャンセル
+          </el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import { ElMessage as Message } from "element-plus";
+
 export default {
-  name: "orderDetail",
-  components: {},
+  name: "menu1",
   data() {
     return {
       listQ4: [
@@ -282,9 +290,16 @@ export default {
   },
 
   mounted() {
-    this.$parent.changeTabBarCss(0);
-    if (sessionStorage.getItem("questionnaire1")) {
-      this.formData = JSON.parse(sessionStorage.getItem("questionnaire1"));
+    this.$parent?.changeTabBarCss?.(0);
+    const raw = sessionStorage.getItem("questionnaire1");
+    if (!raw) return;
+    try {
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") {
+        this.formData = { ...this.formData, ...saved };
+      }
+    } catch (e) {
+      sessionStorage.removeItem("questionnaire1");
     }
   },
 
@@ -328,16 +343,20 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const q1 = this.formData.question1;
-          this.formData.question1 = moment(q1).format("yyyy/MM/DD");
+          this.formData.question1 = moment(q1).format("YYYY/MM/DD");
           sessionStorage.setItem(
             "questionnaire1",
             JSON.stringify(this.formData)
           );
-          console.log("==>", JSON.stringify(this.formData));
           this.$router.push({
             name: "menu-questionnaire2",
           });
         } else {
+          setTimeout(() => {
+            const isError = document.getElementsByClassName("is-error");
+            const el = isError[0]?.querySelector("input, textarea, select");
+            if (el) el.focus();
+          }, 100);
           return false;
         }
       });
@@ -440,7 +459,7 @@ export default {
     margin-bottom: 35px;
   }
 }
-::v-deep .picker_panel {
+:deep(.picker_panel) {
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -492,37 +511,37 @@ export default {
     }
   }
 }
-::v-deep .dialog-footer .el-button--primary {
+:deep(.dialog-footer .el-button--primary) {
   color: #fff;
   background-color: #3c0200;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .dialog-footer .el-button--default {
+:deep(.dialog-footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   padding: 0;
 }
-::v-deep .dialog-footer {
+:deep(.dialog-footer) {
   width: 100%;
   font-size: 0;
   .is-disabled {
     background: #717171 !important;
   }
 }
-::v-deep .dialog-footer .el-button + .el-button {
+:deep(.dialog-footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .dialog-footer .el-button {
+:deep(.dialog-footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;
 }
-::v-deep .el-dialog__body {
+:deep(.el-dialog__body) {
   background: #fffcee;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

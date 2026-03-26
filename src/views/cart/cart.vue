@@ -173,20 +173,20 @@
           top="30vh"
           center
         >
-          <div slot="footer">
+          <template #footer>
             <div class="text-delete fw-m">商品を削除しますか？</div>
 
-            <el-button @click="confirmDeleteProduct()" size="medium">
+            <el-button @click="confirmDeleteProduct()" size="default">
               はい
             </el-button>
             <el-button
               type="primary"
               @click="showDialogDeleteProduct = false"
-              size="medium"
+              size="default"
             >
               いいえ
             </el-button>
-          </div>
+          </template>
         </el-dialog>
       </div>
     </div>
@@ -285,7 +285,7 @@ export default {
     };
   },
 
-  destroyed() {
+  beforeUnmount() {
     this.$parent.changeTabBarCss(0);
   },
 
@@ -702,43 +702,43 @@ export default {
   height: calc(100vh - 382px);
 }
 
-::v-deep .el-dialog {
+:deep(.el-dialog) {
   background: #fffcee;
 }
-::v-deep .el-dialog__footer .el-button--primary {
+:deep(.el-dialog__footer .el-button--primary) {
   color: #fff;
   background-color: #3c0200;
   border-color: #c10230;
   border-radius: 0 0 6px 0;
 }
-::v-deep .el-dialog__footer .el-button--uniqe {
+:deep(.el-dialog__footer .el-button--uniqe) {
   color: #fff;
   background-color: #ff7101;
   border-color: #c10230;
   border-radius: 0 0 6px 6px;
 }
-::v-deep .el-dialog__footer .el-button--default {
+:deep(.el-dialog__footer .el-button--default) {
   color: #fff;
   background-color: #ff7101;
   border-color: #a8a8a8;
   border-radius: 0 0 0 6px;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   padding: 0;
 }
-::v-deep .el-dialog__footer {
+:deep(.el-dialog__footer) {
   width: 100%;
   font-size: 0;
 }
-::v-deep .el-dialog__footer .el-button + .el-button {
+:deep(.el-dialog__footer .el-button + .el-button) {
   margin-left: 0;
 }
-::v-deep .el-dialog__footer .el-button {
+:deep(.el-dialog__footer .el-button) {
   width: 50%;
   border: 0;
   padding: 16px 20px;
 }
-::v-deep .el-dialog__footer .el-button--uniqe {
+:deep(.el-dialog__footer .el-button--uniqe) {
   width: 100%;
   border: 0;
   padding: 16px 20px;

@@ -81,7 +81,7 @@ export default {
       const openId = localStorage.getItem("openId");
       this.$post("/customerinfo/getTPartnerUser", { openId: openId })
         .then((response) => {
-          if ((response.code = 200)) {
+          if (response.code === 200 || response.code === "200") {
             if (response.data) {
               this.transData = response.data;
               // this.transData.birthday = response.data.birthday.replaceAll('/', '')
@@ -92,8 +92,7 @@ export default {
           }
         })
         .catch((err) => {
-          // request error
-          console.log(err);
+          this.$message.error(err.response?.data?.msg || "ERROR");
         });
     },
     openEdit() {

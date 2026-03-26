@@ -129,7 +129,7 @@ export default {
 </script>
 
 <style scoped>
-.inquiry-form-group >>> .el-form-item {
+.inquiry-form-group :deep(.el-form-item) {
   margin: 20px 0 0;
 }
 </style>
