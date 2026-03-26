@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="26.003" viewBox="0 0 29 26.003">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #c10230;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="グループ_1540" data-name="グループ 1540" transform="translate(-1633.536 -932.361)">
+    <path id="路径_604" data-name="路径 604" class="cls-1" d="M1660.254,932.861h-24.437l-1.781,6.588v3.99h28v-3.99Z"/>
+    <path id="パス_601" data-name="パス 601" class="cls-1" d="M1635.521,944.908v12.939a.015.015,0,0,0,.016.014h8.62a.014.014,0,0,0,.016-.013h0v-8.638h7.725v8.638a.015.015,0,0,0,.016.014h8.62a.015.015,0,0,0,.016-.013h0V944.908"/>
+    <line id="直线_44" data-name="直线 44" class="cls-1" x2="28" transform="translate(1634 939.5)"/>
+  </g>
+</svg>

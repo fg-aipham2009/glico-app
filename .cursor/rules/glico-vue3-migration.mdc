@@ -1,0 +1,81 @@
+---
+description: Glico app v3 (Vue 3 + Element Plus) — port tu v2; giu luong & nghiep vu; khong doi CSS; chi sua ky thuat.
+globs:
+  - "**/*.vue"
+alwaysApply: false
+---
+
+# Glico app v3 — Vue 3 + Element Plus (codebase dich migrate)
+
+**Pham vi:** Lam viec trong **`glico-app-v3`**. Co the **doi chieu** file tuong ung o **`glico-app-v2`** khi port, nhung **output** luon la code **Vue 3 + Element Plus + Pinia + Router 4** trong **v3**.
+
+**Ban chat:** **Migrate / port ky thuat** tu Vue 2 + Element UI sang **Vue 3 + Element Plus**. **Luong man hinh, quy trinh nghiep vu, dieu kien, thu tu goi API, payload, validation, hanh vi nguoi dung** — **giu nguyen nhu ban v2**; khong doi de "cai thien" hay refactor nghiep vu.
+
+## Nguyen tac
+
+1. **Khong doi logic / luong nghiep vu:** dieu kien, luong xu ly, man hinh tiep theo, goi API, payload, tham so — **giong hanh vi v2**; chi doi **cu phap & API thu vien** (Vue 3, Element Plus, Pinia, Router, v.v.) khi bat buoc.
+2. **Khong doi CSS / giao dien:** **khong** sua selector, mau, kich thuoc, margin/padding, class style — **khong** doi `<style>` tru **mot ngoai le:** **`/deep/`** → `::v-deep` / **`:deep()`** khi **build bao loi**.
+3. **Chi sua khi** build/runtime **loi** hoac **bat buoc** Vue 3 / Element Plus — khong refactor thua.
+4. **Giu** Options API, ten bien/ham — **khong** tach component neu khong bat buoc.
+5. **Entry v3** (`main.ts`/`main.js`, router, Pinia): cau hinh **mot lan** cho project; **moi file `.vue` trong v3** chi sua noi dung trong file do.
+
+## Vue 3 trong `.vue`
+
+- **Filter** (`|`) → method / computed (**ket qua hien thi giong v2**).
+- **`slot-scope` / `slot=`** → `#` / `v-slot`.
+- **`$listeners`** → gop `$attrs` khi can / khi loi.
+- **`/deep/`** → `::v-deep` / **`:deep()`** **chi khi** build loi — **khong** sua rule CSS khac.
+- **Component + `v-model`:** neu loi → `modelValue` / `update:modelValue` (Vue 3).
+
+**Global filter:** khong dung `Vue.filter` tren Vue 3 — chuyen sang ham / `globalProperties` neu can, **cung ket qua** nhu v2.
+
+## Element UI (v2) → Element Plus (v3)
+
+| Element UI | Element Plus |
+|------------|--------------|
+| `size="medium"` | `size="default"` |
+| `size="mini"` | `size="small"` |
+| `<el-submenu>` | `<el-sub-menu>` |
+| `<i class="el-icon-xxx">` | `<el-icon><Xxx /></el-icon>` + `@element-plus/icons-vue` |
+| Khac | Chi khi loi build hoac tai lieu EP |
+
+**Entry v3:** `ElMessage`, `ElMessageBox`, … (import tu `element-plus`), thay prototype Element UI v2.
+
+## Pinia — module `common` (tuong ung Vuex v2)
+
+Giu ten **`isLoading`**, **`setLoading`**:
+
+```javascript
+import { mapState, mapActions } from 'pinia'
+import { useCommonStore } from '@/stores/common'
+
+export default {
+  computed: { ...mapState(useCommonStore, ['isLoading']) },
+  methods: { ...mapActions(useCommonStore, ['setLoading']) },
+}
+```
+
+## Khung app v3 (tom tat)
+
+- **Vue Router 4** + **Pinia** (khong dung `vue-router@3` / `vuex@3`).
+- **Ant Design Vue 4.x** neu project con dung; trong tung file chi sua khi loi, giu hanh vi.
+- **vue-i18n:** uu tien locale Nhat cho Element Plus; bo khoi entry neu khong dung `$t`.
+
+---
+
+## Prompt (copy) — lam viec trong v3
+
+```text
+@glico-vue3-migration.mdc @glico-app-v3/src/.../TenFile.vue
+
+Port/migrate toi thieu len Vue 3 + Element Plus trong glico-app-v3 (co the doi chieu glico-app-v2). Giu Options API; chi sua bat buoc. **Giu nguyen luong & nghiep vu**. Khong doi CSS (tru :deep neu build loi).
+```
+
+## Checklist
+
+- [ ] **Luong & nghiep vu** giong v2?
+- [ ] **CSS / style** giu nguyen (chi :deep neu bat buoc)?
+- [ ] Filter / slot / `v-model` dung chuan Vue 3?
+- [ ] Element Plus: icon, size, `el-sub-menu`?
+- [ ] Store: Pinia `isLoading` / `setLoading`?
+- [ ] Build v3 chay?

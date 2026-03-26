@@ -1,0 +1,931 @@
+<template>
+  <div>
+    <div class="edit-register-information">
+      <!-- Form Register -->
+      <div class="style-form">
+        <el-form
+          :model="formDataEdit"
+          :rules="rules"
+          ref="formDataEdit"
+          label-width="100px"
+          label-position="top"
+          class="ruleForm"
+        >
+          <!-- Name -->
+          <el-form-item label="Name" prop="name">
+            <span class="ttl" slot="label">
+              <span>お名前</span>
+              <span class="require-field">必須</span>
+            </span>
+            <el-input
+              type="text"
+              v-model="formDataEdit.name"
+              placeholder="素直太郎"
+              autocomplete="off"
+              maxlength="20"
+            />
+          </el-form-item>
+
+          <!-- Phone -->
+          <el-form-item label="Phone" prop="phone">
+            <span class="ttl" slot="label">
+              <span>お電話番号</span>
+              <span class="require-field">必須</span>
+            </span>
+            <el-input
+              placeholder="090-0000-0000"
+              v-model="formDataEdit.phone"
+              autocomplete="off"
+              @input="formatPhone()"
+            />
+          </el-form-item>
+
+          <!-- Email -->
+          <el-form-item label="Email" prop="email">
+            <span class="ttl" slot="label">
+              <span>メールアドレス</span>
+              <span class="require-field">必須</span>
+            </span>
+            <el-input
+              type="text"
+              placeholder="sunao@example.com"
+              v-model.trim="formDataEdit.email"
+              maxlength="255"
+              autocomplete="off"
+            />
+          </el-form-item>
+
+          <!-- Birthday -->
+          <el-form-item label="Birthday" prop="birthday">
+            <span class="ttl" slot="label">
+              <span>生年月日</span>
+              <span class="require-field">必須</span>
+            </span>
+            <el-input
+              type="text"
+              placeholder="2000/01/01"
+              v-model="formDataEdit.birthday"
+              autocomplete="off"
+              :maxlength="10"
+              @input="inputDateOfBirth()"
+            />
+          </el-form-item>
+
+          <!-- Sex -->
+          <el-form-item label="Sex" prop="sex">
+            <span class="ttl" slot="label">
+              <span>性別</span>
+              <span class="require-field">必須</span>
+            </span>
+
+            <div class="contclearfix">
+              <el-radio-group v-model="formDataEdit.sex">
+                <el-radio
+                  label="1"
+                  :class="
+                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                  "
+                >
+                  男性
+                </el-radio>
+                <el-radio
+                  label="2"
+                  :class="
+                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                  "
+                >
+                  女性
+                </el-radio>
+                <el-radio
+                  label="3"
+                  :class="
+                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                  "
+                >
+                  その他
+                </el-radio>
+                <el-radio
+                  label="4"
+                  :class="
+                    sexError && !formData.sex ? 'border-error' : 'border-suc'
+                  "
+                >
+                  回答しない
+                </el-radio>
+              </el-radio-group>
+            </div>
+          </el-form-item>
+
+          <!-- Check Box -->
+          <el-form-item prop="checkbox">
+            <el-checkbox v-model="formDataEdit.checkbox" name="checkbox">
+            </el-checkbox>
+            <span class="agree">
+              <span @click="dialogPrivacyPolicy = true" class="fw-b"
+                >「サービス規約」</span
+              >に同意する</span
+            >
+            <div class="item-check-box">
+              上記規約で引用している
+              <span class="fw-b border-bottom" @click="routerPolicy()"
+                >「プライバシーポリシー」</span
+              >
+              はこちら
+            </div>
+          </el-form-item>
+          <el-form-item prop="checkbox2">
+            <el-checkbox-group v-model="formDataEdit.checkbox2">
+              <el-checkbox
+                name="checkbox2"
+                label="「会社への利用情報の提供について同意する"
+              >
+                <span class="checkboxTow"
+                  >「会社への利用情報の提供について同意する
+                </span>
+              </el-checkbox>
+            </el-checkbox-group>
+            <div class="item-check-box mt--12">
+              本アプリユーザー（以下「ユーザー」といいます。）は、当社がユーザーの所属企業（以下「所属企業」といいます。）及び所属企業の関係会社に対し、所属企業及び所属企業の関係会社が本サービスの利用状況の管理、健康施策の実施、ユーザーの健康管理・指導に利用する目的で、以下の個人情報を第三者提供することについて予め同意します。
+            </div>
+            <div class="item-check-box">
+              (1) ユーザーが本アプリ登録時に記載した、以下の登録情報
+              氏名、生年月日、所属企業名、所属事業所名、メールアドレス
+            </div>
+            <div class="item-check-box">
+              (2)
+              本アプリでのユーザーの購入履歴（購入日時、購入金額、購入商品等）
+            </div>
+          </el-form-item>
+
+          <!-- Button Submit Form -->
+          <el-form-item>
+            <div class="btn-form btn-orange-main">
+              <div class="border-input border-input-black">
+                <el-button
+                  @click="resetForm('formDataEdit')"
+                  class="btn-black-main"
+                  >キャンセル</el-button
+                >
+              </div>
+              <div class="border-input">
+                <el-button type="primary" @click="submitForm('formDataEdit')">
+                  登 録
+                </el-button>
+              </div>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+
+    <!-- Dialog Chose Date -->
+    <el-dialog
+      v-model="showDialogChoseDate"
+      width="90%"
+      :show-close="false"
+      center
+    >
+      <el-date-picker
+        v-model="currentDate"
+        type="date"
+        format="YYYY/MM/DD"
+        value-format="YYYY/MM/DD"
+        placeholder="日付を選択"
+        style="width: 100%"
+        @change="dateChange"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button
+          @click="confirmDate()"
+          size="medium"
+          :disabled="!checkBirthdayFlag"
+          :class="!checkBirthdayFlag ? 'disabled-btn' : ''"
+        >
+          確 定
+        </el-button>
+        <el-button
+          type="primary"
+          @click="showDialogChoseDate = false"
+          size="medium"
+        >
+          キャンセル
+        </el-button>
+      </span>
+    </el-dialog>
+
+    <!-- Dialog Privacy Policy  -->
+    <div class="privacy-policy">
+      <el-dialog
+        title="サービス規約"
+        v-model="dialogPrivacyPolicy"
+        width="90%"
+        :show-close="false"
+        top="8vh"
+      >
+        <div class="content-infomation">
+          <ContentPrivacy />
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button
+            class="cancel btn--black"
+            @click="isConfirmPrivacyPolicy(false)"
+          >
+            同意しない
+          </el-button>
+          <el-button @click="isConfirmPrivacyPolicy(true)">
+            同意する
+          </el-button>
+        </span>
+      </el-dialog>
+    </div>
+  </div>
+</template>
+
+<script>
+import moment from "moment";
+import { ElMessage as Message } from "element-plus";
+import ContentPrivacy from "@/views/mypage/contentPrivacy.vue";
+
+export default {
+  components: {    ContentPrivacy,
+  },
+  data() {
+    const regexJapan = (rule, value, callback) => {
+      const validate = /[一-龠]+|[ぁ-ゔ]+|[ァ-ヴー]+|[々〆〤ヶ]+/u;
+      if (validate.test(value)) {
+        callback();
+      } else {
+        callback("全角文字で入力してください。");
+      }
+    };
+    const checkBl = (rule, value, callback) => {
+      if (value) {
+        callback();
+      } else {
+        callback("「サービス規約」にチェックが行われていません");
+      }
+    };
+    const validateBirthday = (rule, value, callback) => {
+      if ((value + "").length == 10) {
+        console.log("==>", value);
+        const nowDate = moment(new Date(), "YYYY/MM/DD").format("YYYYMMDD");
+        const now = parseInt(nowDate);
+        const birthdayArr = (value + "").split("");
+        const birthdayMonth = parseInt(`${birthdayArr[4] + birthdayArr[5]}`);
+        const birthdayDay = parseInt(`${birthdayArr[6] + birthdayArr[7]}`);
+
+        if (
+          now < value ||
+          birthdayMonth > 12 ||
+          birthdayDay > 31 ||
+          birthdayMonth < 1
+        ) {
+          callback("生年月日を入力してください");
+        } else {
+          callback();
+        }
+      } else {
+        callback("生年月日を入力してください");
+      }
+    };
+    const regexDateOfBirth = (rule, value, callback) => {
+      const validateDate =
+        /^\d{4}\/(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])$/;
+      if (this.checkYear || this.checkMonth || this.checkDay) {
+        callback("生年月日を入力してください");
+      }
+      if (validateDate.test(value)) {
+        callback();
+      } else {
+        callback("生年月日を入力してください");
+      }
+    };
+    return {
+      sexError: false,
+      userId: "",
+      selectDate: "",
+      checkBirthdayFlag: true,
+      currentDate: "",
+      dateOptions: {
+        step: 5,
+        itemHeight: 40,
+        formatter: ["YYYY", "MM", "DD"],
+        type: "year-month-day",
+        active: "active_err",
+      },
+      dialogPrivacyPolicy: false,
+      showDialogChoseDate: false,
+      zipcode: null,
+      numberValidateForm: {
+        age: "",
+      },
+      formDataEdit: {
+        name: null,
+        phone: "",
+        email: null,
+        birthday: null,
+        sex: null,
+        checkbox: true,
+        checkbox2: ["「会社への利用情報の提供について同意する"],
+      },
+      checkDay: false,
+      checkMonth: false,
+      checkYear: false,
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "お名前を入力してください",
+          },
+          {
+            validator: regexJapan,
+            trigger: ["blur", "change"],
+          },
+        ],
+        phone: [
+          {
+            required: true,
+            message: "お電話番号を入力してください",
+            trigger: ["blur", "change"],
+          },
+          {
+            pattern: /^(?:.{12}|.{13}|.{14})$/,
+            message: "10文字〜12文字で入力してください。",
+            trigger: ["blur", "change"],
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: "メールアドレスを入力してください",
+            trigger: ["blur", "change"],
+          },
+          {
+            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+            message: "正しいメールの形式を入力してください。",
+            trigger: ["blur", "change"],
+          },
+        ],
+        birthday: [
+          {
+            required: true,
+            pattern: /^[0-9]/,
+            message: "生年月日を入力してください",
+            trigger: ["blur", "change"],
+          },
+          { validator: regexDateOfBirth, trigger: ["blur", "change"] },
+        ],
+        sex: [
+          {
+            required: true,
+            message: "性別を選択してください",
+            trigger: ["blur", "change"],
+          },
+        ],
+        checkbox: [
+          {
+            validator: checkBl,
+          },
+        ],
+        checkbox2: [
+          {
+            required: true,
+            message:
+              "「会社への利用情報の提供について」にチェックが行われていません",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
+    };
+  },
+
+  created() {
+    this.currentDate = moment().format("YYYY/MM/DD");
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    checkDayFlag(day, month, year) {
+      switch (month) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+          if (day > 31 || day < 1) {
+            this.checkDay = true;
+          } else {
+            this.checkDay = false;
+          }
+          break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+          if (day > 30 || day < 1) {
+            this.checkDay = true;
+          } else {
+            this.checkDay = false;
+          }
+          break;
+        case 2:
+          if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+            if (day > 29 || day < 1) {
+              this.checkDay = true;
+            } else {
+              this.checkDay = false;
+            }
+          } else {
+            if (day > 28 || day < 1) {
+              this.checkDay = true;
+            } else {
+              this.checkDay = false;
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    inputDateOfBirth() {
+      var x = "";
+      x = this.formDataEdit.birthday
+        .replace(/\D/g, "")
+        .match(/(\d{0,4})(\d{0,2})(\d{0,2})/);
+      const now = moment().format("YYYY/MM/DD");
+      const currentYear = parseInt(now.slice(0, 4));
+      const currentMonth = parseInt(now.slice(5, 7));
+      const currentDay = parseInt(now.slice(8, 10));
+      const numberYear = parseInt(x[1]);
+      const numberMonth = parseInt(x[2]);
+      const numberDay = parseInt(x[3]);
+      this.formDataEdit.birthday = !x[2]
+        ? x[1]
+        : x[1] + "/" + x[2] + (x[3] ? "/" + x[3] : "");
+      if (numberYear < 1900 || numberYear > currentYear) {
+        this.checkYear = true;
+      } else {
+        this.checkYear = false;
+      }
+      if (numberYear === currentYear) {
+        if (numberMonth > currentMonth || numberMonth < 1 || numberMonth > 12) {
+          this.checkMonth = true;
+        } else if (numberMonth === currentMonth) {
+          this.checkMonth = false;
+          if (numberDay > currentDay || numberDay < 1) {
+            this.checkDay = true;
+          } else {
+            this.checkDay = false;
+          }
+        } else if (numberMonth <= currentMonth && numberMonth >= 1) {
+          this.checkMonth = false;
+          this.checkDayFlag(numberDay, numberMonth, numberYear);
+        }
+      } else {
+        if (numberMonth < 1 || numberMonth > 12) {
+          this.checkMonth = true;
+        } else {
+          this.checkMonth = false;
+          this.checkDayFlag(numberDay, numberMonth, numberYear);
+        }
+      }
+      if (x[3].length === 2 && numberDay <= currentDay) {
+        this.checkDay = false;
+      } else if (x[3].length === 1) {
+        this.checkDay = true;
+      }
+    },
+
+    routerPolicy() {
+      window.open(
+        "https://www.glico.com/assets/files/sunaodelivery-policy.pdf"
+      );
+    },
+
+    formatBirthday() {
+      let x = "";
+      x = this.formDataEdit.birthday
+        .replace(/\D/g, "")
+        .match(/(\d{0,4})(\d{0,2})(\d{0,2})/);
+      this.formDataEdit.birthday = !x[2]
+        ? x[1]
+        : x[1] + "/" + x[2] + (x[3] ? "/" + x[3] : "");
+    },
+
+    formatPhone() {
+      let x = "";
+      if (this.formDataEdit.phone.length > 13) {
+        x = this.formDataEdit.phone
+          .replace(/\D/g, "")
+          .match(/(\d{0,4})(\d{0,4})(\d{0,4})/);
+      } else {
+        x = this.formDataEdit.phone
+          .replace(/\D/g, "")
+          .match(/(\d{0,3})(\d{0,4})(\d{0,4})/);
+      }
+      this.formDataEdit.phone = !x[2]
+        ? x[1]
+        : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
+    },
+    // Assignment data
+    getData() {
+      let data = JSON.parse(sessionStorage.getItem("information"));
+      this.formDataEdit.name = data.personName;
+      this.formDataEdit.phone = data.userPhone;
+      this.formDataEdit.email = data.userMail;
+      this.formDataEdit.birthday = data.birthday;
+      this.formDataEdit.sex = data.sex;
+      this.userId = data.userId;
+    },
+
+    // Show Calendar
+    openCalendar() {
+      this.checkBirthdayFlag = true;
+      if (this.formDataEdit.birthday) {
+        this.currentDate = this.formDataEdit.birthday;
+      }
+      this.showDialogChoseDate = true;
+    },
+
+    // Confirm Chose Date
+    confirmDate() {
+      if (!this.selectDate) {
+        this.selectDate = this.currentDate;
+      }
+      this.formDataEdit.birthday = this.selectDate;
+      this.showDialogChoseDate = false;
+    },
+
+    isConfirmPrivacyPolicy(value) {
+      this.dialogPrivacyPolicy = false;
+      if (value) {
+        this.formDataEdit.checkbox = true;
+      } else {
+        this.formDataEdit.checkbox = false;
+      }
+    },
+
+    // Triger Change Date
+    dateChange(date) {
+      const now = moment().format("YYYY/MM/DD");
+      this.selectDate = date.replace(" 00:00", "").replace(/-/g, "/");
+      let nowDate = new Date(now.replace(/-/g, "/"));
+      let checkDate = new Date(this.selectDate.replace(/-/g, "/"));
+      if (checkDate > nowDate) {
+        this.checkBirthdayFlag = false;
+        Message.closeAll();
+        this.$message.error("正しい日付を入力してください。");
+      } else {
+        this.selectDate = date.replace(" 00:00", "").replace(/-/g, "");
+        Message.closeAll();
+        this.checkBirthdayFlag = true;
+      }
+    },
+
+    // Submit Form
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.sexError = false;
+          this.saveUser();
+        } else {
+          setTimeout(() => {
+            var isError = document.getElementsByClassName("is-error");
+            isError[0].querySelector("input").focus();
+          }, 500);
+          if (!this.formDataEdit.sex) {
+            this.sexError = true;
+          } else {
+            this.sexError = false;
+          }
+          return false;
+        }
+      });
+    },
+    // Update User
+    saveUser() {
+      const openid = localStorage.getItem("openId");
+      // const birthdayArr = (this.formDataEdit.birthday + "").split("");
+      // const birthdayYear = `${
+      //   birthdayArr[0] + birthdayArr[1] + birthdayArr[2] + birthdayArr[3]
+      // }`;
+      // const birthdayMonth = `${birthdayArr[4] + birthdayArr[5]}`;
+      // const birthdayDay = `${birthdayArr[6] + birthdayArr[7]}`;
+      // const birthdayDate = `${birthdayYear}/${birthdayMonth}/${birthdayDay}`;
+      const data = {
+        openId: openid,
+        userId: this.userId,
+        personName: this.formDataEdit.name,
+        userPhone: this.formDataEdit.phone,
+        userMail: this.formDataEdit.email,
+        birthday: this.formDataEdit.birthday,
+        sex: this.formDataEdit.sex,
+      };
+      this.$post("/customerinfo/updateTPartnerUser", data).then((response) => {
+        if (response.code == "200") {
+          // this.$message.success(response.data);
+          this.$message.success("登録完了しました");
+          this.$router.push({
+            name: "register-information",
+          });
+          // this.$refs[formName] &&
+          this.$refs[formName].resetFields();
+          sessionStorage.removeItem("information");
+        } else {
+          this.$message.error(response.msg);
+        }
+      });
+    },
+    // Reset Form
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.$router.push({
+        name: "register-information",
+      });
+      sessionStorage.removeItem("information");
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.edit-register-information {
+  margin-top: 94px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 100px;
+  .text-check-box {
+    margin-top: 12px;
+    color: #3c0200;
+  }
+  .item-check-box {
+    color: #3c0200;
+    font-size: 16px;
+    padding-left: 33px;
+    line-height: 29px;
+  }
+  .checkboxTow {
+    color: #3c0200;
+    font-size: 16px;
+  }
+  .agree {
+    color: #3c0200;
+    font-size: 16px;
+    width: 200px;
+    height: 50px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .agree:before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    bottom: -6px;
+    height: 1px;
+    width: 50%;
+    border-bottom: 1px solid #3c0200;
+  }
+  .btn-form {
+    margin-top: 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .border-input {
+      width: 100%;
+      .el-button {
+        font-size: 17px;
+      }
+    }
+
+    .border-input + .border-input {
+      margin-left: 24px !important;
+    }
+  }
+}
+.style-form {
+  .el-form-item__label {
+    padding: 0 !important;
+    font-size: 17px;
+    color: #3c0200;
+    .ttl {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .el-form-item__label:before {
+    content: "" !important;
+    margin-right: 0 !important;
+  }
+  .border-error {
+    .el-radio__label {
+      border: 1px solid #dc1400 !important;
+    }
+  }
+  .el-input__inner {
+    border-radius: 6px;
+    height: 33px;
+    font-size: 16px;
+    color: #3c0200;
+    padding: 0px 15px !important;
+    line-height: 33px;
+  }
+  ::placeholder {
+    color: #af9a69 !important;
+    opacity: 1;
+  }
+  .el-radio-group {
+    width: 100%;
+    .el-radio {
+      display: inline-block;
+      width: 50%;
+      margin-right: 0;
+      .el-radio__input {
+        display: none;
+      }
+      .el-radio__label {
+        border: 1px solid #3c0200;
+        border-radius: 17px;
+        height: 33px;
+        padding-top: 7.5px;
+        padding-bottom: 7.5px;
+        text-align: center;
+        font-size: 14px;
+        display: block;
+        gap: 20px;
+        margin-top: 10px;
+        font-weight: 400;
+        padding-left: 0;
+      }
+    }
+    .el-radio:nth-child(2n-1) {
+      .el-radio__label {
+        margin-right: 10px;
+      }
+    }
+    .el-radio:nth-child(2n) {
+      .el-radio__label {
+        margin-left: 10px;
+      }
+    }
+    .el-radio__input.is-checked + .el-radio__label {
+      background: #ffe9b8;
+      color: #3c0200;
+    }
+  }
+}
+</style>
+
+<style lang="less" scoped>
+.yzmsg {
+  font-size: 12px;
+  color: red;
+}
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+::v-deep .picker_panel {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  height: 140px !important;
+  position: relative;
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    /*background-color: #ffffff;*/
+    /*opacity: 0.5;*/
+    pointer-events: none;
+    z-index: 10;
+    &_top {
+      top: 0;
+      // background: linear-gradient(to top, rgba(255, 255, 255, 0.5), #ffffff);
+    }
+    &_bottom {
+      bottom: -2px;
+      // background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), #ffffff);
+    }
+  }
+  .picker_axis {
+    height: 100%;
+    overflow: hidden;
+    min-width: 50px;
+    ul {
+      margin: 0;
+      padding: 0 10px;
+      margin-top: -29px;
+      li {
+        list-style: none;
+        line-height: 30px;
+        color: #af9a69;
+        font-size: 20px;
+        user-select: none;
+        min-width: 60px;
+        text-align: center;
+      }
+      .active_date {
+        /*color: #333333;*/
+        font-size: 20px;
+        line-height: 40px;
+        border-top: 1px solid #3c0200;
+        border-bottom: 1px solid #3c0200;
+        font-weight: 500;
+        color: #3c0200;
+      }
+    }
+  }
+}
+::v-deep .dialog-footer .el-button--primary {
+  color: #fff;
+  background-color: #3c0200;
+  border-color: #c10230;
+  border-radius: 0 0 6px 0;
+}
+::v-deep .dialog-footer .el-button--default {
+  color: #fff;
+  background-color: #ff7101;
+  border-color: #a8a8a8;
+  border-radius: 0 0 0 6px;
+}
+::v-deep .el-dialog__footer {
+  padding: 0;
+}
+::v-deep .dialog-footer {
+  width: 100%;
+  font-size: 0;
+  .is-disabled {
+    background: #717171 !important;
+  }
+}
+::v-deep .dialog-footer .el-button + .el-button {
+  margin-left: 0;
+}
+::v-deep .dialog-footer .el-button {
+  width: 50%;
+  border: 0;
+  padding: 16px 20px;
+}
+::v-deep .el-dialog__body {
+  background: #fffcee;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+</style>
+<style lang="scss">
+.privacy-policy {
+  .content-infomation {
+    max-height: calc(100vh - 320px);
+    overflow: auto;
+    margin: 0px -15px;
+    padding: 0px 15px;
+  }
+  .el-dialog {
+    border-radius: 20px;
+    background: #ffff;
+    .btn--black {
+      background-color: #3c0200;
+      border: 1px solid #3c0200;
+      color: #ffff;
+    }
+    .el-dialog__header {
+      padding: 20px 0px;
+      text-align: center;
+    }
+    .el-dialog__body {
+      background: #ffff;
+      padding: 0px 15px;
+      color: #3c0200;
+    }
+    .dialog-footer {
+      display: flex;
+      justify-content: space-between;
+    }
+    .el-dialog__footer {
+      padding: 10px 10px 15px;
+    }
+
+    .dialog-footer .el-button {
+      width: 47%;
+      border-radius: 23px;
+      height: 43px;
+      padding: 0px;
+    }
+  }
+}
+</style>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="17.777" height="26.987" viewBox="0 0 17.777 26.987">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.2px;
+      }
+    </style>
+  </defs>
+  <g id="组_12" data-name="组 12" transform="translate(0.6 0.6)">
+    <rect id="矩形_4" data-name="矩形 4" class="cls-1" width="2.844" height="5.715" rx="1" transform="translate(6.867 11.132)"/>
+    <path id="路径_12" data-name="路径 12" class="cls-1" d="M2094.634,1295.224l1.845,17.624h10.692l1.845-17.624" transform="translate(-2093.536 -1287.061)"/>
+    <rect id="矩形_5" data-name="矩形 5" class="cls-1" width="16.577" height="2.418" transform="translate(0 3.94)"/>
+    <path id="路径_13" data-name="路径 13" class="cls-1" d="M2094.962,1270.964l.278-1.633a.732.732,0,0,1,.718-.614h12.206a.732.732,0,0,1,.718.614l.278,1.633" transform="translate(-2093.772 -1268.717)"/>
+  </g>
+</svg>

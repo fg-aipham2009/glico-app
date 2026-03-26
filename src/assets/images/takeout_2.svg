@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="70.54" height="43.75" viewBox="0 0 70.54 43.75">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #1e0f40;
+      }
+    </style>
+  </defs>
+  <g id="PatternB" transform="translate(-704 -1672.25)">
+    <rect id="角丸長方形_1_のコピー" data-name="角丸長方形 1 のコピー" class="cls-1" width="70.54" height="43.75" rx="5" transform="translate(704 1672.25)"/>
+    <path id="角丸長方形_2" data-name="角丸長方形 2" class="cls-2" d="M704,1680.2h60.072a2.446,2.446,0,0,1,0,4.892H704"/>
+    <rect id="角丸長方形_3" data-name="角丸長方形 3" class="cls-2" width="32.61" height="4.08" rx="2" transform="translate(708.08 1692.8)"/>
+    <rect id="角丸長方形_3_のコピー" data-name="角丸長方形 3 のコピー" class="cls-2" width="32.61" height="4.08" rx="2" transform="translate(708.08 1700.95)"/>
+    <rect id="レイヤー_5" data-name="レイヤー 5" class="cls-2" width="18" height="18" transform="translate(748 1690)"/>
+    <image id="レイヤー_5_のコピー" data-name="レイヤー 5 のコピー" width="12" height="12" transform="translate(751 1693)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABHNCSVQICAgIfAhkiAAAAFxJREFUKFPt0TEKhFAMRdEjWFgJdorufzeuYkA7wcpGjQhWwh9mrA28JrxL4CaLiB4dtisSU2DJImJGmWrd9ycwofoHGND8COznhRH1C6QNxKM/fNAisH/Rm2M9AF+9PK9A1EUaAAAAAElFTkSuQmCC"/>
+  </g>
+</svg>
